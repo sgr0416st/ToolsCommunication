@@ -198,17 +198,19 @@ public class Request {
 	/**
 	 * このリクエストを強制的にCOM_EXITに書き換えます。
 	 */
-	public void setExitRequest(){
+	public Request setExitRequest(){
 		clear();
 		command = CommandData.COM_EXIT;
+		return this;
 	}
 
 	/**
 	 * このリクエストを強制的にCOM_OKに書き換えます。
 	 */
-	public void setOKRequest(){
+	public Request setOKRequest(){
 		clear();
 		command = CommandData.COM_OK;
+		return this;
 	}
 
 	/**
