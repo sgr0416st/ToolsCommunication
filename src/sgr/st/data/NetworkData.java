@@ -8,8 +8,8 @@ package sgr.st.data;
  */
 public class NetworkData {
 	//public static final String MY_MAC_IP = "133.34.174.93";
-	public static final String MY_MAC_IP = "esuesu";
-	public static final String MY_DESKTOP_IP = "133.34.174.85";
+	public static final String MY_MAC_PRO_IP = "esuesu";
+	public static final String MY_MAC_NORMAL_IP = "suguru";
 	public static final String MY_WINDOWS_IP= "133.34.174.52";
 	public static final String SOTA_IP = "133.34.174.81";
 
