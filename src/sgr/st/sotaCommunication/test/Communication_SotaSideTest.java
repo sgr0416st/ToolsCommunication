@@ -13,7 +13,12 @@ public class Communication_SotaSideTest {
 
 		RequestCommunicater communicater = new RequestCommunicater();
 		Request request = null;
-		communicater.connect(7777);
+		try {
+			communicater.connect(7777);
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
 		try {
 			request = communicater.receive();
 			request.show();

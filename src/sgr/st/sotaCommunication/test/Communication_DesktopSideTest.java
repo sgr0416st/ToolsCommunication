@@ -19,7 +19,12 @@ public class Communication_DesktopSideTest {
 		String SOTA_IP = "133.34.174.154";
 		int port = 7777;
 
-		communicater.connect(SOTA_IP,port);
+		try {
+			communicater.connect(SOTA_IP,port);
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
 		try {
 			s_request = new SendRequest();
 

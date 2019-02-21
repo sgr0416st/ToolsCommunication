@@ -35,24 +35,17 @@ public class RequestCommunicater {
 	 * @param port 待ち受けするポート番号（１０００以上推奨）
 	 * @return success 接続要求が受理されたら{@code <code>true</code>},それ以外は{@code <code>false</code>}
 	 */
-	public boolean connect(int port) {
+	public boolean connect(int port) throws IOException{
 		boolean success = true;
+		ss = new ServerSocket(port);
+		System.out.println("accept");
+		socket = ss.accept(); //クライアントからの通信開始要求が来るまで待機
 
-		try {
-			ss = new ServerSocket(port);
-			System.out.println("accept");
-			socket = ss.accept(); //クライアントからの通信開始要求が来るまで待機
-
-			// 以下、クライアントからの要求発生後
-			is = socket.getInputStream(); //クライアントから数値を受信
-			dis = new DataInputStream(is);
-			os = socket.getOutputStream();
-			dos = new DataOutputStream(os);
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			success = false;
-		}
+		// 以下、クライアントからの要求発生後
+		is = socket.getInputStream(); //クライアントから数値を受信
+		dis = new DataInputStream(is);
+		os = socket.getOutputStream();
+		dos = new DataOutputStream(os);
 
 		return success;
 	}
@@ -62,20 +55,14 @@ public class RequestCommunicater {
 	 * @param port 通信するポート番号
 	 * @return success 接続要求が受理されたら{@code <code>true</code>},それ以外は{@code <code>false</code>}
 	 */
-	public boolean connect(String send_ip,int port) {
+	public boolean connect(String send_ip,int port) throws IOException{
 		boolean success = true;
-		try {
-			socket = new Socket(send_ip,port);
-			socket.setKeepAlive(true);
-			is = socket.getInputStream(); //クライアントから数値を受信
-			dis = new DataInputStream(is);
-			os = socket.getOutputStream();
-			dos = new DataOutputStream(os);
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			System.out.println("conection error");
-		}
+		socket = new Socket(send_ip,port);
+		socket.setKeepAlive(true);
+		is = socket.getInputStream(); //クライアントから数値を受信
+		dis = new DataInputStream(is);
+		os = socket.getOutputStream();
+		dos = new DataOutputStream(os);
 
 		return success;
 	}

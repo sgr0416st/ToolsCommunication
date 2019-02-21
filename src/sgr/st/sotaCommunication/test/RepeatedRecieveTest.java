@@ -16,7 +16,12 @@ public class RepeatedRecieveTest {
 		boolean repeat = true;
 		RequestCommunicater reciver = new RequestCommunicater();
 		Request request = null;
-		reciver.connect(7777);
+		try {
+			reciver.connect(7777);
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
 		while(repeat){
 			try {
 				request = reciver.receive();
