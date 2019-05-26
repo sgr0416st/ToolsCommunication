@@ -9,6 +9,13 @@ import java.util.concurrent.TimeUnit;
 import sgr.st.media.lib.ImageReceiveThread;
 import sgr.st.media.lib.ImageTransmitThread;
 
+/**
+ * 
+ * ImageReceiveThread, およびImageTransmitThreadのテスト。
+ * 
+ * @author satousuguru
+ *
+ */
 public class CommunicateImageTest {
 	private static final String VIDEO_NAME = "test";
 	private static final String IP = "133.34.174.93";
