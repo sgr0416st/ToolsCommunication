@@ -12,7 +12,6 @@ import sgr.st.image.lib.ImageViewer;
 import sgr.st.udp.lib.UDPReceiver;
 
 
-
 public class ImageReceiveThread implements Runnable{
 	private boolean isStopped, doRecord;
 	private UDPReceiver receiver;
