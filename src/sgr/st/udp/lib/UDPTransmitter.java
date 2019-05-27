@@ -9,8 +9,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import sgr.st.media.lib.MediaSettings;
-
 /**
  *　このクラスはUDPパケットを送信するためのクラスです。
  *
@@ -27,12 +25,13 @@ public class UDPTransmitter {
 	 *
 	 * @param destIP 送信先IPアドレス
 	 * @param destPort 送信先ポート番号
+	 * @param myPort 送信先ポート番号
 	 * @throws SocketException ソケットを開くことができなかった場合、
 	 * または指定されたローカル・ポートにソケットをバインドできなかった場合。
 	 * @throws UnknownHostException ローカル・ホスト名をアドレスに解決できなかった場合。
 	 */
-	public UDPTransmitter(String destIP, int destPort) throws SocketException, UnknownHostException {
-		socket = new DatagramSocket(MediaSettings.PORT_IMAGE_SEND.getNum(), InetAddress.getLocalHost());
+	public UDPTransmitter(String destIP, int destPort, int myPort) throws SocketException, UnknownHostException {
+		socket = new DatagramSocket(myPort, InetAddress.getLocalHost());
 		address = new InetSocketAddress(destIP, destPort);
 	}
 

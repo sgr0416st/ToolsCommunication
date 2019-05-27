@@ -7,8 +7,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import sgr.st.media.lib.ImageReceiveThread;
-import sgr.st.media.lib.ImageTransmitThread;
+import javax.sound.sampled.LineUnavailableException;
+
+import sgr.st.media.lib.AudioReceiveThread;
+import sgr.st.media.lib.AudioTransmitThread;
 
 /**
  *
@@ -17,21 +19,23 @@ import sgr.st.media.lib.ImageTransmitThread;
  * @author satousuguru
  *
  */
-public class CommunicateImageTest {
+public class CommunicateAudioTest {
 	private static final String VIDEO_NAME = "test";
+
 
 	public static void main(String[] args) {
 		ExecutorService exec = Executors.newFixedThreadPool(2);
 		try {
 			String IP = InetAddress.getLocalHost().getHostAddress();
-			ImageReceiveThread receiveThread = new ImageReceiveThread(VIDEO_NAME, true);
-			ImageTransmitThread transmitThread = new ImageTransmitThread(VIDEO_NAME, IP);
+			AudioReceiveThread receiveThread = new AudioReceiveThread(VIDEO_NAME);
+			AudioTransmitThread transmitThread = new AudioTransmitThread(VIDEO_NAME, IP);
 
 			exec.submit(receiveThread);
 			exec.submit(transmitThread);
 
+
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(15000);
 				System.out.println("done sleep");
 			} catch (InterruptedException e) {
 				// TODO 自動生成された catch ブロック
@@ -52,6 +56,9 @@ public class CommunicateImageTest {
 		} catch (InterruptedException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
+		} catch (LineUnavailableException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
 		}
 	}
 }

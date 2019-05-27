@@ -7,38 +7,51 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import sgr.st.image.lib.ImageConverter;
+import sgr.st.image.lib.ImageRecorder;
 import sgr.st.image.lib.ImageViewer;
 import sgr.st.udp.lib.UDPReceiver;
 
 
 
 public class ImageReceiveThread implements Runnable{
-	private boolean isStopped;
+	private boolean isStopped, doRecord;
 	private UDPReceiver receiver;
 	private ImageViewer viewer;
-	// private ImageRecorder recorder;
+	private ImageRecorder recorder;
 	private ByteArrayInputStream stream;
 	private BufferedImage image;
 
 
-	public ImageReceiveThread(String video_name) throws SocketException, UnknownHostException {
-		isStopped = false;
-		receiver = new UDPReceiver(MediaSettings.PORT_IMAGE_RECEIVE.getNum());
-		viewer = new ImageViewer(
+	public ImageReceiveThread(String video_name, boolean doRecord) throws SocketException, UnknownHostException {
+		this.isStopped = false;
+		this.doRecord = doRecord;
+		this.receiver = new UDPReceiver(MediaSettings.PORT_IMAGE_RECEIVE.getNum());
+		this.viewer = new ImageViewer(
 				MediaSettings.IMAGE_WIDTH_OF_COMMUNICATION.getNum(),
 				MediaSettings.IMAGE_HEIGHT_OF_COMMUNICATION.getNum()
 				);
-		// recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		if(this.doRecord) {
+			recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		}else {
+			recorder = null;
+		}
+	}
+
+	public ImageReceiveThread(String video_name) throws SocketException, UnknownHostException {
+		this(video_name, false);
 	}
 
 	@Override
 	public void run() {
-
 		while(!this.isStopped){
 			doRepeatedTask();
 		}
+		if(doRecord) {
+			recorder.save();
+			recorder.close();
+			System.out.println("ImageReceiveThread : recorded");
+		}
 		viewer.close();
-		// recorder.close();
 		System.out.println("ImageReceiveThread : finished");
 
 	}
@@ -48,10 +61,13 @@ public class ImageReceiveThread implements Runnable{
 			stream = receiver.receive();
 			image = ImageConverter.ByteStreamToBufferedImage(stream);
 			viewer.showImage(image);
+			if(doRecord) {
+				recorder.write(image);
+			}
 		} catch (IOException e) {
 			if(this.isStopped) {
+				// 必ず呼ばれる訳ではない
 				System.out.println("ImageReceiveThread : stopped");
-				// recorder.save();
 			}else {
 				e.printStackTrace();
 			}

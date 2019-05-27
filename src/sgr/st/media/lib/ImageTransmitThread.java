@@ -6,24 +6,37 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import sgr.st.image.develop.ImageCaputrue;
+import sgr.st.image.lib.ImageCaputrue;
 import sgr.st.image.lib.ImageConverter;
+import sgr.st.image.lib.ImageRecorder;
 import sgr.st.udp.lib.UDPTransmitter;
 
 public class ImageTransmitThread implements Runnable{
-	private boolean isStopped;
+	private boolean isStopped, doRecord;
 	private ImageCaputrue capture;
 	private UDPTransmitter transmitter;
-	// private ImageRecorder recorder;
+	private ImageRecorder recorder;
 	private BufferedImage image;
 	private ByteArrayOutputStream stream;
 
-	public ImageTransmitThread(String video_name, String destIP) throws SocketException, UnknownHostException {
+	public ImageTransmitThread(String video_name, String destIP, boolean doRecord) throws SocketException, UnknownHostException {
 		isStopped = false;
+		this.doRecord = doRecord;
 		capture = new ImageCaputrue();
-		transmitter = new UDPTransmitter(destIP, MediaSettings.PORT_IMAGE_RECEIVE.getNum());
-		// recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		transmitter = new UDPTransmitter(
+				destIP,
+				MediaSettings.PORT_IMAGE_RECEIVE.getNum(),
+				MediaSettings.PORT_IMAGE_SEND.getNum()
+				);
+		if(this.doRecord) {
+			recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		}else {
+			recorder = null;
+		}
+	}
 
+	public ImageTransmitThread(String video_name, String destIP) throws SocketException, UnknownHostException {
+		this(video_name, destIP, false);
 	}
 
 	@Override
@@ -32,14 +45,18 @@ public class ImageTransmitThread implements Runnable{
 			doRepeatedTask();
 		}
 		capture.close();
-		transmitter.close();
-		// recorder.close();
+		if(doRecord) {
+			recorder.save();
+			recorder.close();
+			System.out.println("ImageTransmitThread : recorded");
+		}
 		System.out.println("ImageTransmitThread : finished");
 	}
 
 	private void doRepeatedTask(){
 		try {
 			image = ImageConverter.matToBufferedImage(capture.capture());
+
 			stream = ImageConverter.BufferedImageToByteStream(
 					image,
 					MediaSettings.VIDEO_EXTENSION.getString()
@@ -48,7 +65,6 @@ public class ImageTransmitThread implements Runnable{
 		} catch (IOException e) {
 			if(this.isStopped) {
 				System.out.println("ImageTransmitThread : stopped");
-				// recorder.save();
 			}else {
 				e.printStackTrace();
 			}
