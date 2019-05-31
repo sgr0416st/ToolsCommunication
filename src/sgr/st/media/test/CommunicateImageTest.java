@@ -18,20 +18,22 @@ import sgr.st.media.lib.ImageTransmitThread;
  *
  */
 public class CommunicateImageTest {
-	private static final String VIDEO_NAME = "test";
+	private static final String VIDEO_NAME_RECEIVE = "test_receive";
+	private static final String VIDEO_NAME_TRANSMIT = "test_taransmit";
+	private static final int TIME = 10000;
 
 	public static void main(String[] args) {
-		ExecutorService exec = Executors.newFixedThreadPool(2);
+		ExecutorService exec = Executors.newFixedThreadPool(4);
 		try {
 			String IP = InetAddress.getLocalHost().getHostAddress();
-			ImageReceiveThread receiveThread = new ImageReceiveThread(VIDEO_NAME, true);
-			ImageTransmitThread transmitThread = new ImageTransmitThread(VIDEO_NAME, IP);
+			ImageReceiveThread receiveVideoThread = new ImageReceiveThread(VIDEO_NAME_RECEIVE, true);
+			ImageTransmitThread transmitVideoThread = new ImageTransmitThread(VIDEO_NAME_TRANSMIT, IP, true);
 
-			exec.submit(receiveThread);
-			exec.submit(transmitThread);
+			exec.submit(receiveVideoThread);
+			exec.submit(transmitVideoThread);
 
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(TIME);
 				System.out.println("done sleep");
 			} catch (InterruptedException e) {
 				// TODO 自動生成された catch ブロック
@@ -39,8 +41,9 @@ public class CommunicateImageTest {
 			}
 
 			exec.shutdown();
-			receiveThread.stopThread();
-			transmitThread.stopThread();
+			receiveVideoThread.stopThread();
+			transmitVideoThread.stopThread();
+
 			if(exec.awaitTermination(10, TimeUnit.SECONDS)) {
 				System.out.println("finish exec");
 			}else {

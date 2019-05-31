@@ -1,6 +1,5 @@
 package sgr.st.udp.lib;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,7 +16,6 @@ import java.net.UnknownHostException;
 public class UDPReceiver{
 
 	private DatagramSocket socket;
-	private ByteArrayInputStream byteArrayInputStream;
 	private byte[] buffer;
 	private DatagramPacket packet;
 
@@ -38,13 +36,22 @@ public class UDPReceiver{
 	/**
 	 * UDPパケットを受信して、そのバイトストリームを返します。
 	 *
+	 * @return DatagramPacket 受信したパケット
+	 * @throws IOException 入出力エラーが発生した場合。
+	 */
+	public DatagramPacket receivepacket() throws IOException {
+		this.socket.receive(packet);
+		return packet;
+	}
+
+	/**
+	 * UDPパケットを受信して、そのバイトストリームを返します。
+	 *
 	 * @return byteArrayInputStream 受信したパケットのバイトストリーム。
 	 * @throws IOException 入出力エラーが発生した場合。
 	 */
-	public ByteArrayInputStream receive() throws IOException {
-		this.socket.receive(packet);
-		byteArrayInputStream = new ByteArrayInputStream(packet.getData());
-		return byteArrayInputStream;
+	public byte[] receive() throws IOException {
+		return this.receivepacket().getData();
 	}
 
 	/**

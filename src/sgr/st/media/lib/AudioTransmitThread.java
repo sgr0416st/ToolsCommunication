@@ -1,50 +1,41 @@
 package sgr.st.media.lib;
 
-import java.io.ByteArrayOutputStream;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st.media.develop.AudioCapture;
-import sgr.st.media.develop.AudioRules;
+import sgr.st.sound.lib.AudioCapture;
+import sgr.st.sound.lib.AudioRecorder;
+import sgr.st.sound.lib.AudioRules;
 import sgr.st.udp.lib.UDPTransmitter;
 
 public class AudioTransmitThread implements Runnable{
-
-	private boolean isStopped;
+	private boolean isStopped, doRecord;
 	private AudioCapture capture;
 	private UDPTransmitter transmitter;
-	// private AudioRecorder recorder;
-	private ByteArrayOutputStream stream;
+	private AudioRecorder recorder;
+	private byte[] data;
+	String fileName;
 	private AudioFormat ulawformat;
 
-	public AudioTransmitThread(String video_name, String destIP) throws SocketException, UnknownHostException, LineUnavailableException {
-		isStopped = false;
-		//ulawフォーマット
-		ulawformat = new AudioFormat(
-				AudioFormat.Encoding.ULAW,
-				AudioRules.sampleRate,
-				AudioRules.sampleSizeInBits_ulaw,
-				AudioRules.channels,
-				AudioRules.frameSize,
-				AudioRules.frameRate,
-				AudioRules.isBigEndian
-				);
+	public AudioTransmitThread(String fileName, String destIP, boolean doRecord) throws SocketException, UnknownHostException, LineUnavailableException {
+		this.isStopped = false;
+		this.fileName = fileName;
+		this.doRecord = doRecord;
+		ulawformat = MediaSettings.getUlawFormat();
 		capture = new AudioCapture(AudioRules.SIZE_MAX_DATA_ULAW, ulawformat);
-		//capture = new AudioCapture(AudioRules.SIZE_MAX_DATA_ULAW);
-
-
 		transmitter = new UDPTransmitter(
 				destIP,
 				MediaSettings.PORT_AUDIO_RECEIVE.getNum(),
 				MediaSettings.PORT_AUDIO_SEND.getNum()
 				);
-
-
-		// recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
-
+		if(this.doRecord) {
+			recorder = new AudioRecorder(ulawformat);
+		}else {
+			recorder = null;
+		}
 	}
 
 	@Override
@@ -52,24 +43,31 @@ public class AudioTransmitThread implements Runnable{
 		while(!isStopped){
 			doRepeatedTask();
 		}
+		if(doRecord) {
+			recorder.save(fileName);
+			recorder.close();
+			System.out.println("AudioReceiveThread : recorded");
+		}
 		try {
 			capture.close();
 		} catch (LineUnavailableException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		// recorder.close();
 		System.out.println("AudioTransmitThread : finished");
 	}
 
 	private void doRepeatedTask(){
 		try {
-			stream = capture.read();
-			transmitter.transmit(stream);
+			data = capture.read();
+			transmitter.transmit(data);
+			if(doRecord) {
+				recorder.write(data);
+			}
 		} catch (Exception e) {
 			if(this.isStopped) {
+				// 必ず呼ばれる訳ではない
 				System.out.println("AudioTransmitThread : stopped");
-				// recorder.save();
 			}else {
 				e.printStackTrace();
 			}

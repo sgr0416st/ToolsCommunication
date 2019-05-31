@@ -20,19 +20,17 @@ import sgr.st.media.lib.AudioTransmitThread;
  *
  */
 public class CommunicateAudioTest {
-	private static final String VIDEO_NAME = "test";
-
+	private static final String AUDIO_NAME = "test";
 
 	public static void main(String[] args) {
 		ExecutorService exec = Executors.newFixedThreadPool(2);
 		try {
 			String IP = InetAddress.getLocalHost().getHostAddress();
-			AudioReceiveThread receiveThread = new AudioReceiveThread(VIDEO_NAME);
-			AudioTransmitThread transmitThread = new AudioTransmitThread(VIDEO_NAME, IP);
+			AudioReceiveThread receiveThread = new AudioReceiveThread(AUDIO_NAME, false);
+			AudioTransmitThread transmitThread = new AudioTransmitThread(AUDIO_NAME, IP, false);
 
 			exec.submit(receiveThread);
 			exec.submit(transmitThread);
-
 
 			try {
 				Thread.sleep(15000);

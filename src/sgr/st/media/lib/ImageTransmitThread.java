@@ -1,7 +1,6 @@
 package sgr.st.media.lib;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -17,7 +16,7 @@ public class ImageTransmitThread implements Runnable{
 	private UDPTransmitter transmitter;
 	private ImageRecorder recorder;
 	private BufferedImage image;
-	private ByteArrayOutputStream stream;
+	private byte[] data;
 
 	public ImageTransmitThread(String video_name, String destIP, boolean doRecord) throws SocketException, UnknownHostException {
 		isStopped = false;
@@ -56,12 +55,11 @@ public class ImageTransmitThread implements Runnable{
 	private void doRepeatedTask(){
 		try {
 			image = ImageConverter.matToBufferedImage(capture.capture());
-
-			stream = ImageConverter.BufferedImageToByteStream(
-					image,
-					MediaSettings.VIDEO_EXTENSION.getString()
-					);
-			transmitter.transmit(stream);
+			data = ImageConverter.BufferedImageToByte(image, MediaSettings.VIDEO_EXTENSION.getString());
+			transmitter.transmit(data);
+			if(doRecord) {
+				recorder.write(image);
+			}
 		} catch (IOException e) {
 			if(this.isStopped) {
 				System.out.println("ImageTransmitThread : stopped");

@@ -1,5 +1,10 @@
 package sgr.st.media.lib;
 
+import javax.sound.sampled.AudioFormat;
+
+import sgr.st.sound.lib.AudioRules;
+
+
 public enum MediaSettings {
 	PORT_IMAGE_RECEIVE(9011),
 	PORT_IMAGE_SEND(9012),
@@ -8,7 +13,8 @@ public enum MediaSettings {
 	FPS_DEFAULT(30),
 	IMAGE_WIDTH_OF_COMMUNICATION(600),
 	IMAGE_HEIGHT_OF_COMMUNICATION(600),
-	VIDEO_EXTENSION("jpeg");
+	VIDEO_EXTENSION("jpeg"),
+	AUDIO_EXTENSION(".wav");
 
 	private int num;
 	private String str;
@@ -23,6 +29,13 @@ public enum MediaSettings {
 		this.str = str;
 	}
 
+	public static AudioFormat getUlawFormat() {
+		return __format.ULAW_FORMAT;
+	}
+	public static AudioFormat getLinearFormat() {
+		return __format.LINEAR_FORMAT;
+	}
+
 	public int getNum() {
 		return num;
 	}
@@ -30,4 +43,25 @@ public enum MediaSettings {
 	public String getString() {
 		return str;
 	}
+
+	// シングルトン
+	public static class __format{
+		private static final AudioFormat ULAW_FORMAT = new AudioFormat(
+				AudioFormat.Encoding.ULAW,
+				AudioRules.sampleRate,
+				AudioRules.sampleSizeInBits_ulaw,
+				AudioRules.channels,
+				AudioRules.frameSize,
+				AudioRules.frameRate,
+				AudioRules.isBigEndian
+				);
+		private static final AudioFormat LINEAR_FORMAT = new AudioFormat(
+				AudioRules.sampleRate,
+				AudioRules.sampleSizeInBits_PCM,
+				AudioRules.channels,
+				true,
+				AudioRules.isBigEndian
+				);
+	}
+
 }

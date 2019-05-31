@@ -2,44 +2,40 @@ package sgr.st.media.lib;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st.media.develop.AudioPlayer;
-import sgr.st.media.develop.AudioRules;
+import sgr.st.sound.lib.AudioPlayer;
+import sgr.st.sound.lib.AudioRecorder;
+import sgr.st.sound.lib.AudioRules;
 import sgr.st.udp.lib.UDPReceiver;
 
 public class AudioReceiveThread implements Runnable{
-	private boolean isStopped;
+	private boolean isStopped, doRecord;
 	private UDPReceiver receiver;
 	private AudioPlayer player;
-	// private AudeioRecorder recorder;
+	private AudioRecorder recorder;
 	private AudioFormat ulawformat;
-	private ByteArrayInputStream stream;
+	private DatagramPacket packet;
+	private String fileName;
 
 
-	public AudioReceiveThread(String video_name) throws SocketException, UnknownHostException, LineUnavailableException {
+	public AudioReceiveThread(String fileName, boolean doRecord) throws SocketException, UnknownHostException, LineUnavailableException {
 		isStopped = false;
-		//ulawフォーマット
-		ulawformat = new AudioFormat(
-				AudioFormat.Encoding.ULAW,
-				AudioRules.sampleRate,
-				AudioRules.sampleSizeInBits_ulaw,
-				AudioRules.channels,
-				AudioRules.frameSize,
-				AudioRules.frameRate,
-				AudioRules.isBigEndian
-				);
-
+		this.fileName = fileName;
+		this.doRecord = doRecord;
+		ulawformat = MediaSettings.getUlawFormat();
 		receiver = new UDPReceiver(MediaSettings.PORT_AUDIO_RECEIVE.getNum());
 		player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW, ulawformat);
-		//player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW);
-
-
-		// recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		if(this.doRecord) {
+			recorder = new AudioRecorder(ulawformat);
+		}else {
+			recorder = null;
+		}
 	}
 
 	@Override
@@ -47,17 +43,25 @@ public class AudioReceiveThread implements Runnable{
 		while(!this.isStopped){
 			doRepeatedTask();
 		}
-		// recorder.save();
+		if(doRecord) {
+			recorder.save(fileName);
+			recorder.close();
+			System.out.println("AudioReceiveThread : recorded");
+		}
 		player.close();
-		// recorder.close();
 		System.out.println("AudioReceiveThread : finished");
 
 	}
 
 	private void doRepeatedTask(){
 		try {
-			stream = receiver.receive();
-			player.write(stream);
+			packet = receiver.receivepacket();
+			int size = packet.getLength();
+			byte[] data = packet.getData();
+			player.write(new ByteArrayInputStream(data));
+			if(doRecord) {
+				recorder.write(data, 0, size);
+			}
 		} catch (IOException e) {
 			if(this.isStopped) {
 				// 必ず呼ばれる訳ではない

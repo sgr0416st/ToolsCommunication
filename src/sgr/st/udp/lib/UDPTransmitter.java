@@ -1,6 +1,5 @@
 package sgr.st.udp.lib;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -40,8 +39,7 @@ public class UDPTransmitter {
 	 * @param byteArrayOutputStream 送信するデータのバイトストリーム
 	 * @throws IOException 入出力エラーが発生した場合。
 	 */
-	public void transmit(ByteArrayOutputStream byteArrayOutputStream) throws IOException {
-		byte[] data = byteArrayOutputStream.toByteArray();
+	public void transmit(byte[] data) throws IOException {
 		DatagramPacket packet = new DatagramPacket(data, data.length, address);
 		this.socket.send(packet);
 	}

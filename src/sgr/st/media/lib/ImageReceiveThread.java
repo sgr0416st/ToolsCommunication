@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import sgr.st.image.lib.ImageConverter;
+import javax.imageio.ImageIO;
+
 import sgr.st.image.lib.ImageRecorder;
 import sgr.st.image.lib.ImageViewer;
 import sgr.st.udp.lib.UDPReceiver;
@@ -17,7 +18,7 @@ public class ImageReceiveThread implements Runnable{
 	private UDPReceiver receiver;
 	private ImageViewer viewer;
 	private ImageRecorder recorder;
-	private ByteArrayInputStream stream;
+	private byte[] data;
 	private BufferedImage image;
 
 
@@ -57,8 +58,8 @@ public class ImageReceiveThread implements Runnable{
 
 	private void doRepeatedTask(){
 		try {
-			stream = receiver.receive();
-			image = ImageConverter.ByteStreamToBufferedImage(stream);
+			data = receiver.receive();
+			image = ImageIO.read( new ByteArrayInputStream( data ));
 			viewer.showImage(image);
 			if(doRecord) {
 				recorder.write(image);
