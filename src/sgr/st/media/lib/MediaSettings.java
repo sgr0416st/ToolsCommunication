@@ -14,7 +14,8 @@ public enum MediaSettings {
 	IMAGE_WIDTH_OF_COMMUNICATION(600),
 	IMAGE_HEIGHT_OF_COMMUNICATION(600),
 	VIDEO_EXTENSION("jpeg"),
-	AUDIO_EXTENSION(".wav");
+	AUDIO_EXTENSION(".wav"),
+	MIXER_NAME_OF_SOTA("CODEC [plughw:2,0]");
 
 	private int num;
 	private String str;
@@ -63,5 +64,6 @@ public enum MediaSettings {
 				AudioRules.isBigEndian
 				);
 	}
+
 
 }

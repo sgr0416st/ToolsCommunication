@@ -1,1 +1,4 @@
 /.classpath
+/bin/
+/dest/*.wav
+/dest/*.avi

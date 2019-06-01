@@ -15,10 +15,10 @@ import sgr.st.media.lib.ImageReceiveThread;
 import sgr.st.media.lib.ImageTransmitThread;
 
 public class CommunicateTest {
-	private static final String VIDEO_NAME_RECEIVE = "test_image_receive";
-	private static final String VIDEO_NAME_TRANSMIT = "test_image_taransmit";
-	private static final String AUDIO_NAME_RECEIVE = "test_audio_receive";
-	private static final String AUDIO_NAME_TRANSMIT = "test_audio_transmit";
+	private static final String VIDEO_NAME_RECEIVE = "dest/test_image_receive";
+	private static final String VIDEO_NAME_TRANSMIT = "dest/test_image_taransmit";
+	private static final String AUDIO_NAME_RECEIVE = "dest/test_audio_receive";
+	private static final String AUDIO_NAME_TRANSMIT = "dest/test_audio_transmit";
 	private static final int TIME = 10000;
 
 	public static void main(String[] args) {
