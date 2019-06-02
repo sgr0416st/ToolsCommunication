@@ -1,4 +1,4 @@
-package sgr.st.udp_old.lib;
+package sgr.st._old.udp_old.lib;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
