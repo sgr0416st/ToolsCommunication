@@ -19,24 +19,30 @@ public class AudioReceiveThread implements Runnable{
 	private UDPReceiver receiver;
 	private AudioPlayer player;
 	private AudioRecorder recorder;
-	private AudioFormat linearFormat, ulawformat;
+	private AudioFormat linearFormat, ulawFormat;
 	private DatagramPacket packet;
 	private String fileName;
 
-
-	public AudioReceiveThread(String fileName, boolean doRecord) throws SocketException, UnknownHostException, LineUnavailableException {
-		isStopped = false;
+	public AudioReceiveThread(String fileName) throws SocketException, UnknownHostException, LineUnavailableException {
+		init();
+		this.doRecord = true;
 		this.fileName = fileName;
-		this.doRecord = doRecord;
-		ulawformat = MediaSettings.getUlawFormat();
+		recorder = new AudioRecorder(ulawFormat);
+	}
+
+	public AudioReceiveThread() throws SocketException, UnknownHostException, LineUnavailableException {
+		init();
+		this.doRecord = false;
+		this.fileName = null;
+		recorder = null;
+	}
+
+	protected void init() throws SocketException, UnknownHostException, LineUnavailableException {
+		isStopped = false;
+		ulawFormat = MediaSettings.getUlawFormat();
 		linearFormat = MediaSettings.getLinearFormat();
 		receiver = new UDPReceiver(MediaSettings.PORT_AUDIO_RECEIVE.getNum());
-		player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW, AudioRules.SIZE_MAX_DATA_ULAW*2, ulawformat, linearFormat);
-		if(this.doRecord) {
-			recorder = new AudioRecorder(ulawformat);
-		}else {
-			recorder = null;
-		}
+		player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW, AudioRules.SIZE_MAX_DATA_ULAW*2, ulawFormat, linearFormat);
 	}
 
 	@Override

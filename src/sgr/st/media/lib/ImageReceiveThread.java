@@ -22,23 +22,25 @@ public class ImageReceiveThread implements Runnable{
 	private BufferedImage image;
 
 
-	public ImageReceiveThread(String video_name, boolean doRecord) throws SocketException, UnknownHostException {
+	public ImageReceiveThread(String video_name) throws SocketException, UnknownHostException {
+		init();
+		this.doRecord = true;
+		recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+	}
+
+	public ImageReceiveThread() throws SocketException, UnknownHostException {
+		init();
+		this.doRecord = false;
+		recorder = null;
+	}
+
+	protected void init() throws SocketException, UnknownHostException {
 		this.isStopped = false;
-		this.doRecord = doRecord;
 		this.receiver = new UDPReceiver(MediaSettings.PORT_IMAGE_RECEIVE.getNum());
 		this.viewer = new ImageViewer(
 				MediaSettings.IMAGE_WIDTH_OF_COMMUNICATION.getNum(),
 				MediaSettings.IMAGE_HEIGHT_OF_COMMUNICATION.getNum()
 				);
-		if(this.doRecord) {
-			recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
-		}else {
-			recorder = null;
-		}
-	}
-
-	public ImageReceiveThread(String video_name) throws SocketException, UnknownHostException {
-		this(video_name, false);
 	}
 
 	@Override

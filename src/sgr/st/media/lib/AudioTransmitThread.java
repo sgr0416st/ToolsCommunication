@@ -20,10 +20,22 @@ public class AudioTransmitThread implements Runnable{
 	String fileName;
 	private AudioFormat ulawformat;
 
-	public AudioTransmitThread(String fileName, String destIP, boolean doRecord) throws SocketException, UnknownHostException, LineUnavailableException {
-		this.isStopped = false;
+	public AudioTransmitThread(String destIP, String fileName) throws SocketException, UnknownHostException, LineUnavailableException {
+		init(destIP);
 		this.fileName = fileName;
-		this.doRecord = doRecord;
+		this.doRecord = true;
+		recorder = new AudioRecorder(ulawformat);
+	}
+
+	public AudioTransmitThread(String destIP) throws SocketException, UnknownHostException, LineUnavailableException {
+		init(destIP);
+		this.fileName = null;
+		this.doRecord = false;
+		recorder = null;
+	}
+
+	protected void init(String destIP) throws LineUnavailableException, SocketException, UnknownHostException{
+		this.isStopped = false;
 		ulawformat = MediaSettings.getUlawFormat();
 		capture = new AudioCapture(AudioRules.SIZE_MAX_DATA_ULAW, ulawformat);
 		transmitter = new UDPTransmitter(
@@ -31,11 +43,6 @@ public class AudioTransmitThread implements Runnable{
 				MediaSettings.PORT_AUDIO_RECEIVE.getNum(),
 				MediaSettings.PORT_AUDIO_SEND.getNum()
 				);
-		if(this.doRecord) {
-			recorder = new AudioRecorder(ulawformat);
-		}else {
-			recorder = null;
-		}
 	}
 
 	@Override

@@ -25,10 +25,10 @@ public class CommunicateTest {
 		ExecutorService exec = Executors.newFixedThreadPool(4);
 		try {
 			String IP = InetAddress.getLocalHost().getHostAddress();
-			ImageReceiveThread receiveVideoThread = new ImageReceiveThread(VIDEO_NAME_RECEIVE, true);
-			ImageTransmitThread transmitVideoThread = new ImageTransmitThread(VIDEO_NAME_TRANSMIT, IP, true);
-			AudioReceiveThread receiveAudioThread = new AudioReceiveThread(AUDIO_NAME_RECEIVE, true);
-			AudioTransmitThread transmitAudioThread = new AudioTransmitThread(AUDIO_NAME_TRANSMIT, IP, true);
+			ImageReceiveThread receiveVideoThread = new ImageReceiveThread(VIDEO_NAME_RECEIVE);
+			ImageTransmitThread transmitVideoThread = new ImageTransmitThread(IP, VIDEO_NAME_TRANSMIT);
+			AudioReceiveThread receiveAudioThread = new AudioReceiveThread(AUDIO_NAME_RECEIVE);
+			AudioTransmitThread transmitAudioThread = new AudioTransmitThread(IP, AUDIO_NAME_TRANSMIT);
 
 			exec.submit(receiveVideoThread);
 			exec.submit(transmitVideoThread);

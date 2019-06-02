@@ -26,8 +26,8 @@ public class CommunicateAudioTest {
 		ExecutorService exec = Executors.newFixedThreadPool(2);
 		try {
 			String IP = InetAddress.getLocalHost().getHostAddress();
-			AudioReceiveThread receiveThread = new AudioReceiveThread(AUDIO_NAME, false);
-			AudioTransmitThread transmitThread = new AudioTransmitThread(AUDIO_NAME, IP, false);
+			AudioReceiveThread receiveThread = new AudioReceiveThread(AUDIO_NAME);
+			AudioTransmitThread transmitThread = new AudioTransmitThread(IP, AUDIO_NAME);
 
 			exec.submit(receiveThread);
 			exec.submit(transmitThread);

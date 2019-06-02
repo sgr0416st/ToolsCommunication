@@ -18,24 +18,26 @@ public class ImageTransmitThread implements Runnable{
 	private BufferedImage image;
 	private byte[] data;
 
-	public ImageTransmitThread(String video_name, String destIP, boolean doRecord) throws SocketException, UnknownHostException {
+	public ImageTransmitThread(String destIP, String video_name) throws SocketException, UnknownHostException {
+		init(destIP);
+		this.doRecord = true;
+		recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+	}
+
+	public ImageTransmitThread(String destIP) throws SocketException, UnknownHostException {
+		init(destIP);
+		this.doRecord = false;
+		recorder = null;
+	}
+
+	protected void init(String destIP) throws SocketException, UnknownHostException {
 		isStopped = false;
-		this.doRecord = doRecord;
 		capture = new ImageCaputrue();
 		transmitter = new UDPTransmitter(
 				destIP,
 				MediaSettings.PORT_IMAGE_RECEIVE.getNum(),
 				MediaSettings.PORT_IMAGE_SEND.getNum()
 				);
-		if(this.doRecord) {
-			recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
-		}else {
-			recorder = null;
-		}
-	}
-
-	public ImageTransmitThread(String video_name, String destIP) throws SocketException, UnknownHostException {
-		this(video_name, destIP, false);
 	}
 
 	@Override
