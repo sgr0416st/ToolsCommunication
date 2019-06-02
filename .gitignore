@@ -1,4 +1,6 @@
-/.classpath
+.classpath
 /bin/
 /dest/*.wav
 /dest/*.avi
+.DS_Store
+.project

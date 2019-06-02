@@ -19,7 +19,7 @@ public class AudioReceiveThread implements Runnable{
 	private UDPReceiver receiver;
 	private AudioPlayer player;
 	private AudioRecorder recorder;
-	private AudioFormat ulawformat;
+	private AudioFormat linearFormat, ulawformat;
 	private DatagramPacket packet;
 	private String fileName;
 
@@ -29,8 +29,9 @@ public class AudioReceiveThread implements Runnable{
 		this.fileName = fileName;
 		this.doRecord = doRecord;
 		ulawformat = MediaSettings.getUlawFormat();
+		linearFormat = MediaSettings.getLinearFormat();
 		receiver = new UDPReceiver(MediaSettings.PORT_AUDIO_RECEIVE.getNum());
-		player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW, ulawformat);
+		player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW, AudioRules.SIZE_MAX_DATA_ULAW*2, ulawformat, linearFormat);
 		if(this.doRecord) {
 			recorder = new AudioRecorder(ulawformat);
 		}else {
