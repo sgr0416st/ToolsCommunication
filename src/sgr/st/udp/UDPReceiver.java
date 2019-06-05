@@ -15,6 +15,7 @@ import java.net.UnknownHostException;
  */
 public class UDPReceiver{
 
+	protected static final int MAX_BUFFER_SIZE = 60000;
 	protected DatagramSocket socket;
 	private byte[] buffer;
 	private DatagramPacket packet;
@@ -29,9 +30,9 @@ public class UDPReceiver{
 	 * @throws UnknownHostException ローカル・ホスト名をアドレスに解決できなかった場合。
 	 */
 	public UDPReceiver(String myIP, int port) throws SocketException, UnknownHostException {
-		this.setSocket(port, InetAddress.getByName(myIP));
-		this.buffer = new byte[Settings.MAX_BUFFER.getSize()];
+		this.buffer = new byte[MAX_BUFFER_SIZE];
 		this.packet = new DatagramPacket(buffer,buffer.length);
+		this.setSocket(port, InetAddress.getByName(myIP));
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class UDPReceiver{
 	 */
 	public UDPReceiver(int port) throws SocketException, UnknownHostException {
 		this.setSocket(port,  InetAddress.getLocalHost());
-		this.buffer = new byte[Settings.MAX_BUFFER.getSize()];
+		this.buffer = new byte[MAX_BUFFER_SIZE];
 		this.packet = new DatagramPacket(buffer,buffer.length);
 	}
 
