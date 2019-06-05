@@ -2,9 +2,7 @@ package sgr.st.sotaCommunication;
 
 import java.io.IOException;
 
-import sgr.st.data.CommandData;
-import sgr.st.sotaCommunication.Request;
-import sgr.st.sotaCommunication.RequestCommunicater;
+import sgr.st._old.data.CommandData;
 
 public class RepeatedRecieveTest {
 

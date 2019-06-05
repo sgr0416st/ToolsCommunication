@@ -2,10 +2,7 @@ package sgr.st.sotaCommunication;
 
 import java.io.IOException;
 
-import sgr.st.data.CommandData;
-import sgr.st.sotaCommunication.RecieveRequest;
-import sgr.st.sotaCommunication.RequestCommunicater;
-import sgr.st.sotaCommunication.SendRequest;
+import sgr.st._old.data.CommandData;
 
 //クライアント側
 public class Communication_DesktopSideTest {

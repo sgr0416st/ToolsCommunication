@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import sgr.st.image.lib.ImageCaputrue;
 import sgr.st.image.lib.ImageConverter;
 import sgr.st.image.lib.ImageRecorder;
-import sgr.st.udp.lib.UDPTransmitter;
+import sgr.st.udp.UDPTransmitter;
 
 public class ImageTransmitThread implements Runnable{
 	private boolean isStopped, doRecord;

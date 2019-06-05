@@ -1,7 +1,7 @@
 package sgr.st.sotaCommunication;
 
-import sgr.st.data.CommandData;
-import sgr.st.dataType.lib.ParseByteData;
+import sgr.st._old.data.CommandData;
+import sgr.st.dataTranslater.ParseByteData;
 
 /**
  * バイナリデータ化したリクエストのデコードに必要なメソッドを追加して、Requestクラスを拡張したです。

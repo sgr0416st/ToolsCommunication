@@ -5,7 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-import sgr.st.data.NetworkData;
+import sgr.st._old.data.NetworkData;
 import sgr.st.thread.lib.ICallback;
 import sgr.st.thread.lib.OperatableThread;
 

@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import sgr.st.image.lib.ImageRecorder;
 import sgr.st.image.lib.ImageViewer;
-import sgr.st.udp.lib.UDPReceiver;
+import sgr.st.udp.UDPReceiver;
 
 
 public class ImageReceiveThread implements Runnable{

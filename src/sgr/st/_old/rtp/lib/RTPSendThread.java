@@ -7,7 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.util.Random;
 
-import sgr.st.data.NetworkData;
+import sgr.st._old.data.NetworkData;
 import sgr.st.thread.lib.ICallback;
 import sgr.st.thread.lib.OperatableThread;
 

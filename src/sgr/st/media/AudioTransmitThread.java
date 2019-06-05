@@ -9,7 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 import sgr.st.sound.lib.AudioCapture;
 import sgr.st.sound.lib.AudioRecorder;
 import sgr.st.sound.lib.AudioRules;
-import sgr.st.udp.lib.UDPTransmitter;
+import sgr.st.udp.UDPTransmitter;
 
 public class AudioTransmitThread implements Runnable{
 	private boolean isStopped, doRecord;

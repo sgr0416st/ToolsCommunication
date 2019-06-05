@@ -7,8 +7,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import sgr.st.udp.lib.Settings;
-
 /**
  * このクラスはUDPパケットを受信するためのクラスです。
  *
