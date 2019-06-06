@@ -8,6 +8,11 @@ import sgr.st.udp.MulticastReceiver;
 
 public class MulticastAudioReceiveThread extends AudioReceiveThread{
 
+	public MulticastAudioReceiveThread(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af, String fileName)
+			throws SocketException, LineUnavailableException {
+		super(myPort, myIP, audioBufSize_bf, audioBufSize_af, fileName);
+	}
+
 	public MulticastAudioReceiveThread(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af)
 			throws SocketException, LineUnavailableException {
 		super(myPort, myIP, audioBufSize_bf, audioBufSize_af);
