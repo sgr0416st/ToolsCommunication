@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 
@@ -22,13 +21,13 @@ public class ImageReceiveThread implements Runnable{
 	private BufferedImage image;
 
 
-	public ImageReceiveThread(int myport, int width, int height, int fps, String video_name) throws SocketException, UnknownHostException {
+	public ImageReceiveThread(int myport, int width, int height, int fps, String video_name) throws SocketException {
 		init(myport, width, height);
 		this.doRecord = true;
 		recorder = new ImageRecorder(video_name, fps);
 	}
 
-	public ImageReceiveThread(int myport, int width, int height) throws SocketException, UnknownHostException {
+	public ImageReceiveThread(int myport, int width, int height) throws SocketException {
 		init(myport, width, height);
 		this.doRecord = false;
 		recorder = null;

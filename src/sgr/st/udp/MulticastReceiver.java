@@ -13,7 +13,6 @@ public class MulticastReceiver extends UDPReceiver {
 
 	@Override
 	protected boolean setSocket(int myPort, String myIP) {
-		System.setProperty("java.net.preferIPv4Stack", "true");
 		try {
 			MulticastSocket s_temp =  new MulticastSocket(myPort);
 			s_temp.joinGroup(InetAddress.getByName(myIP));

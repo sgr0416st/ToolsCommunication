@@ -4,44 +4,66 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st._old.MediaSettings;
 import sgr.st.sound.lib.AudioPlayer;
 import sgr.st.sound.lib.AudioRecorder;
 import sgr.st.udp.UDPReceiver;
 
 public class AudioReceiveThread implements Runnable{
+	protected UDPReceiver receiver;
+	protected AudioPlayer player;
+	protected AudioRecorder recorder;
+	protected DatagramPacket packet;
+
 	private boolean isStopped, doRecord;
-	private UDPReceiver receiver;
-	private AudioPlayer player;
-	private AudioRecorder recorder;
 	private AudioFormat linearFormat, ulawFormat;
-	private DatagramPacket packet;
 	private String fileName;
 
-	public AudioReceiveThread(int myPort, int audioBufSize_bf, int audioBufSize_af, String fileName) throws SocketException, UnknownHostException, LineUnavailableException {
-		init(myPort, audioBufSize_bf, audioBufSize_af);
-		this.doRecord = true;
-		this.fileName = fileName;
-		recorder = new AudioRecorder(ulawFormat);
+	public AudioReceiveThread(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af, String fileName) throws SocketException, LineUnavailableException {
+		init(myPort, myIP, audioBufSize_bf, audioBufSize_af, fileName);
 	}
 
-	public AudioReceiveThread(int myPort, int audioBufSize_bf, int audioBufSize_af) throws SocketException, UnknownHostException, LineUnavailableException {
-		init(myPort, audioBufSize_bf, audioBufSize_af);
-		this.doRecord = false;
-		this.fileName = null;
-		recorder = null;
+	public AudioReceiveThread(int myPort, int audioBufSize_bf, int audioBufSize_af, String fileName) throws SocketException, LineUnavailableException {
+		init(myPort, null, audioBufSize_bf, audioBufSize_af, fileName);
 	}
 
-	protected void init(int myPort, int audioBufSize_bf, int audioBufSize_af) throws SocketException, UnknownHostException, LineUnavailableException {
+	public AudioReceiveThread(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af) throws SocketException, LineUnavailableException {
+		init(myPort, myIP, audioBufSize_bf, audioBufSize_af, null);
+	}
+
+	public AudioReceiveThread(int myPort, int audioBufSize_bf, int audioBufSize_af) throws SocketException, LineUnavailableException {
+		init(myPort, null, audioBufSize_bf, audioBufSize_af, null);
+	}
+
+	protected void init(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af, String fileName) throws SocketException, LineUnavailableException {
 		isStopped = false;
+		this.setReciever(myPort, myIP);
+		this.setRecorder(fileName);
+		this.setPlayer(audioBufSize_bf, audioBufSize_af);
+	}
+
+	protected void setReciever(int myPort, String myIP) throws SocketException {
+		receiver = new UDPReceiver(myPort);
+	}
+
+	protected void setRecorder(String fileName) {
+		if(fileName != null) {
+			this.doRecord = true;
+			this.fileName = fileName;
+			recorder = new AudioRecorder(ulawFormat);
+		}else {
+			this.doRecord = false;
+			this.fileName = null;
+			recorder = null;
+		}
+	}
+
+	protected void setPlayer(int audioBufSize_bf, int audioBufSize_af) throws LineUnavailableException {
 		ulawFormat = MediaSettings.getUlawFormat();
 		linearFormat = MediaSettings.getLinearFormat();
-		receiver = new UDPReceiver(myPort);
 		player = new AudioPlayer(audioBufSize_bf, audioBufSize_af, ulawFormat, linearFormat);
 	}
 
