@@ -6,7 +6,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 import sgr.st.udp.MulticastReceiver;
 
-class MulticastAudioReceiveThread extends AudioReceiveThread{
+public class MulticastAudioReceiveThread extends AudioReceiveThread{
 
 	public MulticastAudioReceiveThread(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af)
 			throws SocketException, LineUnavailableException {
