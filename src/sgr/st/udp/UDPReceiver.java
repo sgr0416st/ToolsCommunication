@@ -21,43 +21,54 @@ public class UDPReceiver{
 	private DatagramPacket packet;
 
 	/**
-	 * 指定されたポート番号から受信用ソケットと受信用パケットを生成します。
+	 * 指定されたポート番号とIPアドレスから受信用ソケットと受信用パケットを生成します。
 	 *
+	 * @param myPort 受信に使うポート番号
 	 * @param myIP 受信に使うIPアドレス
-	 * @param port 受信に使うポート番号
 	 * @throws SocketException ソケットを開くことができなかった場合、
-	 * または指定されたローカルポートにソケットをバインドできなかった場合。
-	 * @throws UnknownHostException ローカル・ホスト名をアドレスに解決できなかった場合。
+	 * または指定されたローカルポートにソケットをバインドできなかった場合、
+	 * またはローカル・ホスト名をアドレスに解決できなかった場合。
 	 */
-	public UDPReceiver(String myIP, int port) throws SocketException, UnknownHostException {
+	public UDPReceiver(int myPort, String myIP) throws SocketException {
 		this.buffer = new byte[MAX_BUFFER_SIZE];
 		this.packet = new DatagramPacket(buffer,buffer.length);
-		this.setSocket(port, InetAddress.getByName(myIP));
+		if(!this.setSocket(myPort, myIP)) {
+			throw new SocketException();
+		}
 	}
 
 	/**
 	 * 指定されたポート番号から受信用ソケットと受信用パケットを生成します。
 	 *
-	 * @param port 受信に使うポート番号
+	 * @param myPort 受信に使うポート番号
 	 * @throws SocketException ソケットを開くことができなかった場合、
-	 * または指定されたローカルポートにソケットをバインドできなかった場合。
-	 * @throws UnknownHostException ローカル・ホスト名をアドレスに解決できなかった場合。
+	 * または指定されたローカルポートにソケットをバインドできなかった場合、
 	 */
-	public UDPReceiver(int port) throws SocketException, UnknownHostException {
-		this.setSocket(port,  InetAddress.getLocalHost());
-		this.buffer = new byte[MAX_BUFFER_SIZE];
-		this.packet = new DatagramPacket(buffer,buffer.length);
+	public UDPReceiver(int myPort) throws SocketException {
+		this(myPort, null);
 	}
 
 	/**
-	 * 初期化時にこのメソッドによってソケットがセットされます。
+	 * コンストラクタで呼び出される、ソケットを準備するメソッド。
 	 *
-	 * @param port ソケットのポート
-	 * @param addr ソケットのアドレス
-	 * @throws SocketException
+	 * @param myPort
+	 * @param myIP
+	 * @return ソケットの生成に成功したらtrue, 失敗したらfalse
 	 */
-	protected void setSocket(int port, InetAddress addr) throws SocketException {
-		socket = new DatagramSocket(port, addr);
+	protected boolean setSocket(int myPort, String myIP){
+		try {
+			if(myIP == null) {
+				socket = new DatagramSocket(myPort);
+			}else {
+				socket = new DatagramSocket(myPort, InetAddress.getByName(myIP));
+			}
+		} catch (SocketException e) {
+			return false;
+		} catch (UnknownHostException e) {
+			// TODO 自動生成された catch ブロック
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -66,7 +77,7 @@ public class UDPReceiver{
 	 * @return DatagramPacket 受信したパケット
 	 * @throws IOException 入出力エラーが発生した場合。
 	 */
-	public DatagramPacket receivepacket() throws IOException {
+	public DatagramPacket receivePacket() throws IOException {
 		this.socket.receive(packet);
 		return packet;
 	}
@@ -78,7 +89,7 @@ public class UDPReceiver{
 	 * @throws IOException 入出力エラーが発生した場合。
 	 */
 	public byte[] receive() throws IOException {
-		return this.receivepacket().getData();
+		return this.receivePacket().getData();
 	}
 
 	/**

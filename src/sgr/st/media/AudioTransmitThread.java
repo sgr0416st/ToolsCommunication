@@ -1,14 +1,13 @@
 package sgr.st.media;
 
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
+import sgr.st._old.MediaSettings;
 import sgr.st.sound.lib.AudioCapture;
 import sgr.st.sound.lib.AudioRecorder;
-import sgr.st.sound.lib.AudioRules;
 import sgr.st.udp.UDPTransmitter;
 
 public class AudioTransmitThread implements Runnable{
@@ -20,29 +19,46 @@ public class AudioTransmitThread implements Runnable{
 	String fileName;
 	private AudioFormat ulawformat;
 
-	public AudioTransmitThread(String destIP, String fileName) throws SocketException, UnknownHostException, LineUnavailableException {
-		init(destIP);
+	/**
+	 * レコードあり
+	 *
+	 * @param destPort
+	 * @param destIP
+	 * @param myPort
+	 * @param audioBufSize
+	 * @param fileName
+	 * @throws SocketException
+	 * @throws LineUnavailableException
+	 */
+	public AudioTransmitThread(int destPort, String destIP, int myPort, int audioBufSize, String fileName) throws SocketException, LineUnavailableException {
+		init(destPort, destIP, myPort, audioBufSize);
 		this.fileName = fileName;
 		this.doRecord = true;
 		recorder = new AudioRecorder(ulawformat);
 	}
 
-	public AudioTransmitThread(String destIP) throws SocketException, UnknownHostException, LineUnavailableException {
-		init(destIP);
+	/**
+	 * レコードなし
+	 *
+	 * @param destPort
+	 * @param destIP
+	 * @param myPort
+	 * @param audioBufSize
+	 * @throws SocketException
+	 * @throws LineUnavailableException
+	 */
+	public AudioTransmitThread(int destPort, String destIP, int myPort, int audioBufSize) throws SocketException, LineUnavailableException {
+		init(destPort, destIP, myPort, audioBufSize);
 		this.fileName = null;
 		this.doRecord = false;
 		recorder = null;
 	}
 
-	protected void init(String destIP) throws LineUnavailableException, SocketException, UnknownHostException{
+	protected void init(int destPort, String destIP, int myPort, int audioBufSize) throws LineUnavailableException, SocketException{
 		this.isStopped = false;
 		ulawformat = MediaSettings.getUlawFormat();
-		capture = new AudioCapture(AudioRules.SIZE_MAX_DATA_ULAW, ulawformat);
-		transmitter = new UDPTransmitter(
-				destIP,
-				MediaSettings.PORT_AUDIO_RECEIVE.getNum(),
-				MediaSettings.PORT_AUDIO_SEND.getNum()
-				);
+		capture = new AudioCapture(audioBufSize, ulawformat);
+		transmitter = new UDPTransmitter(destPort, destIP, myPort);
 	}
 
 	@Override

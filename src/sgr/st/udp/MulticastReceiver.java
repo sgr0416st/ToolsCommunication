@@ -4,25 +4,25 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class MulticastReceiver extends UDPReceiver {
 
-	public MulticastReceiver(String addrstr, int port) throws SocketException, UnknownHostException {
-		super(addrstr, port);
+	public MulticastReceiver(int myPort, String myIP) throws SocketException {
+		super(myPort, myIP);
 	}
 
 	@Override
-	protected void setSocket(int port, InetAddress addr) throws SocketException {
+	protected boolean setSocket(int myPort, String myIP) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		try {
-			MulticastSocket s_temp =  new MulticastSocket(port);
-			s_temp.joinGroup(addr);
+			MulticastSocket s_temp =  new MulticastSocket(myPort);
+			s_temp.joinGroup(InetAddress.getByName(myIP));
 			this.socket = s_temp;
 		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 

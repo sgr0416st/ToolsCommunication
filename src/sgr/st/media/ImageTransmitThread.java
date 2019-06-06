@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import sgr.st.image.lib.ImageCaputrue;
-import sgr.st.image.lib.ImageConverter;
-import sgr.st.image.lib.ImageRecorder;
+import sgr.st.ImageCaputrue;
+import sgr.st.ImageConverter;
+import sgr.st.ImageRecorder;
+import sgr.st._old.MediaSettings;
 import sgr.st.udp.UDPTransmitter;
 
 public class ImageTransmitThread implements Runnable{
@@ -18,26 +19,22 @@ public class ImageTransmitThread implements Runnable{
 	private BufferedImage image;
 	private byte[] data;
 
-	public ImageTransmitThread(String destIP, String video_name) throws SocketException, UnknownHostException {
-		init(destIP);
+	public ImageTransmitThread(int destport, String destIP, int myport, int fps, String video_name) throws SocketException, UnknownHostException {
+		init(destport, destIP, myport);
 		this.doRecord = true;
-		recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		recorder = new ImageRecorder(video_name, fps);
 	}
 
-	public ImageTransmitThread(String destIP) throws SocketException, UnknownHostException {
-		init(destIP);
+	public ImageTransmitThread(int destport, String destIP, int myport) throws SocketException, UnknownHostException {
+		init(destport, destIP, myport);
 		this.doRecord = false;
 		recorder = null;
 	}
 
-	protected void init(String destIP) throws SocketException, UnknownHostException {
+	protected void init(int destport, String destIP, int myport) throws SocketException, UnknownHostException {
 		isStopped = false;
 		capture = new ImageCaputrue();
-		transmitter = new UDPTransmitter(
-				destIP,
-				MediaSettings.PORT_IMAGE_RECEIVE.getNum(),
-				MediaSettings.PORT_IMAGE_SEND.getNum()
-				);
+		transmitter = new UDPTransmitter(destport, destIP, myport);
 	}
 
 	@Override

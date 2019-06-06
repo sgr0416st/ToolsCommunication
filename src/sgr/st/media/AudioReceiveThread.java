@@ -9,9 +9,9 @@ import java.net.UnknownHostException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
+import sgr.st._old.MediaSettings;
 import sgr.st.sound.lib.AudioPlayer;
 import sgr.st.sound.lib.AudioRecorder;
-import sgr.st.sound.lib.AudioRules;
 import sgr.st.udp.UDPReceiver;
 
 public class AudioReceiveThread implements Runnable{
@@ -23,26 +23,26 @@ public class AudioReceiveThread implements Runnable{
 	private DatagramPacket packet;
 	private String fileName;
 
-	public AudioReceiveThread(String fileName) throws SocketException, UnknownHostException, LineUnavailableException {
-		init();
+	public AudioReceiveThread(int myPort, int audioBufSize_bf, int audioBufSize_af, String fileName) throws SocketException, UnknownHostException, LineUnavailableException {
+		init(myPort, audioBufSize_bf, audioBufSize_af);
 		this.doRecord = true;
 		this.fileName = fileName;
 		recorder = new AudioRecorder(ulawFormat);
 	}
 
-	public AudioReceiveThread() throws SocketException, UnknownHostException, LineUnavailableException {
-		init();
+	public AudioReceiveThread(int myPort, int audioBufSize_bf, int audioBufSize_af) throws SocketException, UnknownHostException, LineUnavailableException {
+		init(myPort, audioBufSize_bf, audioBufSize_af);
 		this.doRecord = false;
 		this.fileName = null;
 		recorder = null;
 	}
 
-	protected void init() throws SocketException, UnknownHostException, LineUnavailableException {
+	protected void init(int myPort, int audioBufSize_bf, int audioBufSize_af) throws SocketException, UnknownHostException, LineUnavailableException {
 		isStopped = false;
 		ulawFormat = MediaSettings.getUlawFormat();
 		linearFormat = MediaSettings.getLinearFormat();
-		receiver = new UDPReceiver(MediaSettings.PORT_AUDIO_RECEIVE.getNum());
-		player = new AudioPlayer(AudioRules.SIZE_MAX_DATA_ULAW, AudioRules.SIZE_MAX_DATA_ULAW*2, ulawFormat, linearFormat);
+		receiver = new UDPReceiver(myPort);
+		player = new AudioPlayer(audioBufSize_bf, audioBufSize_af, ulawFormat, linearFormat);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class AudioReceiveThread implements Runnable{
 
 	private void doRepeatedTask(){
 		try {
-			packet = receiver.receivepacket();
+			packet = receiver.receivePacket();
 			int size = packet.getLength();
 			byte[] data = packet.getData();
 			player.write(new ByteArrayInputStream(data));

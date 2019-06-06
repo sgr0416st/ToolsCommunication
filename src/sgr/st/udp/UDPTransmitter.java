@@ -22,46 +22,57 @@ public class UDPTransmitter {
 	/**
 	 * 指定された送信先IPアドレス、送信先ポート番号から送信用ソケットを生成します。
 	 *
-	 * @param destIP 送信先IPアドレス
 	 * @param destPort 送信先ポート番号
-	 * @param myIP 送信元IPアドレス
+	 * @param destIP 送信先IPアドレス
 	 * @param myPort 送信元ポート番号
+	 * @param myIP 送信元IPアドレス
 	 * @throws SocketException ソケットを開くことができなかった場合、
-	 * または指定されたローカル・ポートにソケットをバインドできなかった場合。
-	 * @throws UnknownHostException ローカル・ホスト名をアドレスに解決できなかった場合。
+	 * または指定されたローカル・ポートにソケットをバインドできなかった場合、
+	 * またはローカル・ホスト名をアドレスに解決できなかった場合。
 	 */
-	public UDPTransmitter(String destIP, int destPort, String myIP, int myPort) throws SocketException, UnknownHostException {
-		this.setSocket(myPort, myIP);
+	public UDPTransmitter(int destPort, String destIP,  int myPort, String myIP) throws SocketException{
+		if(!this.setSocket(myPort, myIP)) {
+			throw new SocketException();
+		}
 		address = new InetSocketAddress(destIP, destPort);
 	}
 
 	/**
 	 * 指定された送信先IPアドレス、送信先ポート番号から送信用ソケットを生成します。
 	 *
-	 * @param destIP 送信先IPアドレス
 	 * @param destPort 送信先ポート番号
+	 * @param destIP 送信先IPアドレス
 	 * @param myPort 送信元ポート番号
 	 * @throws SocketException ソケットを開くことができなかった場合、
-	 * または指定されたローカル・ポートにソケットをバインドできなかった場合。
-	 * @throws UnknownHostException ローカル・ホスト名をアドレスに解決できなかった場合。
+	 * または指定されたローカル・ポートにソケットをバインドできなかった場合、
+	 * またはローカル・ホスト名をアドレスに解決できなかった場合。
 	 */
-	public UDPTransmitter(String destIP, int destPort, int myPort) throws SocketException, UnknownHostException {
-		this(destIP, destPort, null, myPort);
+	public UDPTransmitter(int destPort, String destIP, int myPort) throws SocketException {
+		this(destPort, destIP, myPort, null);
 	}
 
 	/**
 	 * 与えられたポート、IPを用いてソケットを初期化するメソッド
 	 *
 	 * @param myPort 指定したポートでソケットを開く
-	 * @param myaddr nullであればIPを指定せず呼び出す
-	 * @throws SocketException
-	 * @throws UnknownHostException
-	 */
-	protected boolean setSocket(int myPort, String myIP) throws SocketException, UnknownHostException{
-		if(myIP == null) {
-			socket = new DatagramSocket(myPort);
+	 * @param myIP nullであればIPを指定せず呼び出す
+	 * @return ソケットを開くことができなかった場合、
+	 * または指定されたローカル・ポートにソケットをバインドできなかった場合、
+	 * またはローカル・ホスト名をアドレスに解決できなかった場合。	 */
+	protected boolean setSocket(int myPort, String myIP){
+		try {
+			if(myIP == null) {
+				socket = new DatagramSocket(myPort);
+			}else {
+				socket = new DatagramSocket(myPort, InetAddress.getByName(myIP));
+			}
+		} catch (SocketException se) {
+			se.printStackTrace();
+			return false;
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			return false;
 		}
-		socket = new DatagramSocket(myPort, InetAddress.getByName(myIP));
 		return true;
 	}
 

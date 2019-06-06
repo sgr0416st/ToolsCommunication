@@ -8,8 +8,8 @@ import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 
-import sgr.st.image.lib.ImageRecorder;
-import sgr.st.image.lib.ImageViewer;
+import sgr.st.ImageRecorder;
+import sgr.st.ImageViewer;
 import sgr.st.udp.UDPReceiver;
 
 
@@ -22,25 +22,22 @@ public class ImageReceiveThread implements Runnable{
 	private BufferedImage image;
 
 
-	public ImageReceiveThread(String video_name) throws SocketException, UnknownHostException {
-		init();
+	public ImageReceiveThread(int myport, int width, int height, int fps, String video_name) throws SocketException, UnknownHostException {
+		init(myport, width, height);
 		this.doRecord = true;
-		recorder = new ImageRecorder(video_name, MediaSettings.FPS_DEFAULT.getNum());
+		recorder = new ImageRecorder(video_name, fps);
 	}
 
-	public ImageReceiveThread() throws SocketException, UnknownHostException {
-		init();
+	public ImageReceiveThread(int myport, int width, int height) throws SocketException, UnknownHostException {
+		init(myport, width, height);
 		this.doRecord = false;
 		recorder = null;
 	}
 
-	protected void init() throws SocketException, UnknownHostException {
+	protected void init(int myport, int width, int height) throws SocketException {
 		this.isStopped = false;
-		this.receiver = new UDPReceiver(MediaSettings.PORT_IMAGE_RECEIVE.getNum());
-		this.viewer = new ImageViewer(
-				MediaSettings.IMAGE_WIDTH_OF_COMMUNICATION.getNum(),
-				MediaSettings.IMAGE_HEIGHT_OF_COMMUNICATION.getNum()
-				);
+		this.receiver = new UDPReceiver(myport);
+		this.viewer = new ImageViewer(width, height);
 	}
 
 	@Override
