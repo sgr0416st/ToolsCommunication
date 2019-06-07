@@ -2,7 +2,8 @@ package sgr.st.media;
 
 import javax.sound.sampled.AudioFormat;
 
-import sgr.st.sound.lib.AudioRules;
+import sgr.st.sound.AudioRules;
+
 
 
 public enum MediaSettings {

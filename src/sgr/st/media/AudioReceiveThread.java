@@ -8,19 +8,18 @@ import java.net.SocketException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st.sound.lib.AudioPlayer;
-import sgr.st.sound.lib.AudioRecorder;
+import sgr.st.sound.AudioPlayer;
+import sgr.st.sound.AudioRecorder;
 import sgr.st.udp.UDPReceiver;
 
 public class AudioReceiveThread implements Runnable{
 	protected UDPReceiver receiver;
 	protected AudioPlayer player;
 	protected AudioRecorder recorder;
+	protected AudioFormat linearFormat, ulawFormat;
 	protected DatagramPacket packet;
-
-	private boolean isStopped, doRecord;
-	private AudioFormat linearFormat, ulawFormat;
-	private String fileName;
+	protected boolean isStopped, doRecord;
+	protected String fileName;
 
 	public AudioReceiveThread(int myPort, String myIP, int audioBufSize_bf, int audioBufSize_af, String fileName) throws SocketException, LineUnavailableException {
 		init(myPort, myIP, audioBufSize_bf, audioBufSize_af, fileName);

@@ -5,19 +5,18 @@ import java.net.SocketException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st.sound.lib.AudioCapture;
-import sgr.st.sound.lib.AudioRecorder;
+import sgr.st.sound.AudioCapture;
+import sgr.st.sound.AudioRecorder;
 import sgr.st.udp.UDPTransmitter;
 
 public class AudioTransmitThread implements Runnable{
 	protected AudioCapture capture;
 	protected UDPTransmitter transmitter;
 	protected AudioRecorder recorder;
-
-	private boolean isStopped, doRecord;
-	private byte[] data;
-	String fileName;
-	private AudioFormat ulawformat;
+	protected AudioFormat ulawformat;
+	protected byte[] data;
+	protected String fileName;
+	protected boolean isStopped, doRecord;
 
 	/**
 	 * レコードあり
