@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
+import sgr.st.AudioCapture;
+import sgr.st.AudioPlayer;
+import sgr.st.AudioRecorder;
 import sgr.st.media.MediaSettings;
 import sgr.st.properties.PropertiesReader;
-import sgr.st.sound.AudioCapture;
-import sgr.st.sound.AudioPlayer;
-import sgr.st.sound.AudioRecorder;
 
 /**
  *

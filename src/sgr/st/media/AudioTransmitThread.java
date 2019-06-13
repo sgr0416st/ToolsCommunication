@@ -5,8 +5,8 @@ import java.net.SocketException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st.sound.AudioCapture;
-import sgr.st.sound.AudioRecorder;
+import sgr.st.AudioCapture;
+import sgr.st.AudioRecorder;
 import sgr.st.udp.UDPTransmitter;
 
 public class AudioTransmitThread implements Runnable{

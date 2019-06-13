@@ -8,8 +8,8 @@ import java.net.SocketException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import sgr.st.sound.AudioPlayer;
-import sgr.st.sound.AudioRecorder;
+import sgr.st.AudioPlayer;
+import sgr.st.AudioRecorder;
 import sgr.st.udp.UDPReceiver;
 
 public class AudioReceiveThread implements Runnable{

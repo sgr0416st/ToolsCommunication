@@ -2,7 +2,7 @@ package sgr.st.media;
 
 import javax.sound.sampled.AudioFormat;
 
-import sgr.st.sound.AudioConstants;
+import sgr.st.AudioConstants;
 
 
 
