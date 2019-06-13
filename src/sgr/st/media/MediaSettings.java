@@ -2,7 +2,7 @@ package sgr.st.media;
 
 import javax.sound.sampled.AudioFormat;
 
-import sgr.st.sound.AudioRules;
+import sgr.st.sound.AudioConstants;
 
 
 
@@ -50,19 +50,19 @@ public enum MediaSettings {
 	public static class __format{
 		private static final AudioFormat ULAW_FORMAT = new AudioFormat(
 				AudioFormat.Encoding.ULAW,
-				AudioRules.sampleRate,
-				AudioRules.sampleSizeInBits_ulaw,
-				AudioRules.channels,
-				AudioRules.frameSize,
-				AudioRules.frameRate,
-				AudioRules.isBigEndian
+				AudioConstants.sampleRate,
+				AudioConstants.sampleSizeInBits_ulaw,
+				AudioConstants.channels,
+				AudioConstants.frameSize,
+				AudioConstants.frameRate,
+				AudioConstants.isBigEndian
 				);
 		private static final AudioFormat LINEAR_FORMAT = new AudioFormat(
-				AudioRules.sampleRate,
-				AudioRules.sampleSizeInBits_PCM,
-				AudioRules.channels,
+				AudioConstants.sampleRate,
+				AudioConstants.sampleSizeInBits_PCM,
+				AudioConstants.channels,
 				true,
-				AudioRules.isBigEndian
+				AudioConstants.isBigEndian
 				);
 	}
 

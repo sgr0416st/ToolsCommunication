@@ -85,12 +85,7 @@ public class AudioTransmitThread implements Runnable{
 			recorder.close();
 			System.out.println("AudioReceiveThread : recorded");
 		}
-		try {
-			capture.close();
-		} catch (LineUnavailableException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+		capture.close();
 		System.out.println("AudioTransmitThread : finished");
 	}
 

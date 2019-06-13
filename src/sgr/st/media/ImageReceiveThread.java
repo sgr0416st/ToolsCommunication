@@ -21,10 +21,11 @@ public class ImageReceiveThread implements Runnable{
 	private BufferedImage image;
 
 
-	public ImageReceiveThread(int myport, int width, int height, int fps, String video_name) throws SocketException {
+	public ImageReceiveThread(int myport, int width, int height, int fps, String filePath) throws SocketException {
 		init(myport, width, height);
 		this.doRecord = true;
-		recorder = new ImageRecorder(video_name, fps);
+		recorder = new ImageRecorder(filePath, width, height);
+		recorder.start();
 	}
 
 	public ImageReceiveThread(int myport, int width, int height) throws SocketException {
@@ -45,7 +46,8 @@ public class ImageReceiveThread implements Runnable{
 			doRepeatedTask();
 		}
 		if(doRecord) {
-			recorder.save();
+			recorder.stop();
+			recorder.rewriteTruthTime();
 			recorder.close();
 			System.out.println("ImageReceiveThread : recorded");
 		}

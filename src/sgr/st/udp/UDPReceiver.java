@@ -100,7 +100,9 @@ public class UDPReceiver{
 	 *
 	 */
 	public void close() {
-		socket.close();
+		if(socket != null) {
+			socket.close();
+		}
 	}
 
 	public boolean isClosed() {

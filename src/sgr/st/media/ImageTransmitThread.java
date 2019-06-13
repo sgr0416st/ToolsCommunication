@@ -4,23 +4,25 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.SocketException;
 
-import sgr.st.ImageCaputrue;
+import sgr.st.ImageCapture;
+import sgr.st.ImageConstants;
 import sgr.st.ImageConverter;
 import sgr.st.ImageRecorder;
 import sgr.st.udp.UDPTransmitter;
 
 public class ImageTransmitThread implements Runnable{
 	private boolean isStopped, doRecord;
-	private ImageCaputrue capture;
+	private ImageCapture capture;
 	private UDPTransmitter transmitter;
 	private ImageRecorder recorder;
 	private BufferedImage image;
 	private byte[] data;
 
-	public ImageTransmitThread(int destport, String destIP, int myport, int fps, String video_name) throws SocketException {
+	public ImageTransmitThread(int destport, String destIP, int myport, int fps, String filePath) throws SocketException {
 		init(destport, destIP, myport);
 		this.doRecord = true;
-		recorder = new ImageRecorder(video_name, fps);
+		recorder = new ImageRecorder(filePath, ImageConstants.DEFAULT_IMAGE_WIDTH, ImageConstants.DEFAULT_IMAGE_HEIGHT);
+		recorder.start();
 	}
 
 	public ImageTransmitThread(int destport, String destIP, int myport) throws SocketException {
@@ -31,7 +33,7 @@ public class ImageTransmitThread implements Runnable{
 
 	protected void init(int destport, String destIP, int myport) throws SocketException {
 		isStopped = false;
-		capture = new ImageCaputrue();
+		capture = new ImageCapture();
 		transmitter = new UDPTransmitter(destport, destIP, myport);
 	}
 
@@ -42,7 +44,8 @@ public class ImageTransmitThread implements Runnable{
 		}
 		capture.close();
 		if(doRecord) {
-			recorder.save();
+			recorder.stop();
+			recorder.rewriteTruthTime();
 			recorder.close();
 			System.out.println("ImageTransmitThread : recorded");
 		}
