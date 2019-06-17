@@ -26,8 +26,8 @@ import sgr.st.properties.PropertiesReader;
  */
 public class CommunicateAudioDataDemo {
 
-	private static final String AUDIO_NAME_RECEIVE = "dest/test_audio_receive";
-	private static final String AUDIO_NAME_TRANSMIT = "dest/test_audio_transmit";
+	private static final String AUDIO_NAME_RECEIVE = "dest/test_audio_receive.wav";
+	private static final String AUDIO_NAME_TRANSMIT = "dest/test_audio_transmit.wav";
 
 	public static void main(String[] args) {
 		int rcvPort, sndPort, audioBufSize_ulaw, audioBufSize_pcm;
