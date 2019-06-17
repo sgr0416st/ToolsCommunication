@@ -30,8 +30,8 @@ public class CommunicateAudioDataDemo {
 	private static final String AUDIO_NAME_TRANSMIT = "dest/test_audio_transmit.wav";
 
 	public static void main(String[] args) {
-		int rcvPort, sndPort, audioBufSize_ulaw, audioBufSize_pcm;
-		String rcvIP;
+		int destPort, myPort, audioBufSize_ulaw, audioBufSize_pcm;
+		String myIP, destIP;
 		PropertiesReader reader;
 
 		try {
@@ -39,16 +39,17 @@ public class CommunicateAudioDataDemo {
 			reader = new PropertiesReader(
 					"/Users/satousuguru/workspace/programing/java/propaties/network.properties"
 					);
-			rcvIP = reader.getProPerty("IP_MACPRO");
-			rcvPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
-			sndPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
+			myIP = reader.getProPerty("IP_MACPRO");
+			destIP = reader.getProPerty("IP_MACAIR");
+			destPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
+			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
 			audioBufSize_ulaw = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_ULAW"));
 			audioBufSize_pcm = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_LINEAR"));
 
 			// スレッドの初期化
 			ExecutorService exec = Executors.newFixedThreadPool(2);
-			AudioDataReceiveThread receiveThread = new AudioDataReceiveThread(rcvPort, rcvIP, audioBufSize_ulaw, audioBufSize_pcm, AUDIO_NAME_RECEIVE);
-			AudioDataTransmitThread transmitThread = new AudioDataTransmitThread(rcvPort, rcvIP, sndPort, audioBufSize_ulaw, AUDIO_NAME_TRANSMIT);
+			AudioDataReceiveThread receiveThread = new AudioDataReceiveThread(destPort, myIP, audioBufSize_ulaw, audioBufSize_pcm, AUDIO_NAME_RECEIVE);
+			AudioDataTransmitThread transmitThread = new AudioDataTransmitThread(destPort, destIP, myPort, audioBufSize_ulaw, AUDIO_NAME_TRANSMIT);
 
 			// スレッドの実行
 			exec.submit(receiveThread);
