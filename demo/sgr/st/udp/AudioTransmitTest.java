@@ -14,13 +14,15 @@ import sgr.st.properties.PropertiesReader;
 public class AudioTransmitTest {
 
 	public static void main(String[] args) {
-		int destPort, myPort, audioBufSize_ulaw;
+		@SuppressWarnings("unused")
+		int destPort, myPort, audioBufSize_ulaw, audioBufSize_linear;
 		String destIP;
 		PropertiesReader reader;
 
 		UDPTransmitter transmitter = null;
 		AudioCapture capture = null;
-		AudioFormat ulawFormat;
+		@SuppressWarnings("unused")
+		AudioFormat ulawFormat, linearFormat;
 		byte[] data;
 
 		try {
@@ -32,10 +34,15 @@ public class AudioTransmitTest {
 			destPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
 			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
 			audioBufSize_ulaw = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_ULAW"));
+			audioBufSize_linear = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_LINEAR"));
 
+			linearFormat = MediaSettings.getLinearFormat();
 			ulawFormat = MediaSettings.getUlawFormat();
+
 			transmitter = new UDPTransmitter(destPort, destIP, myPort);
+
 			capture = new AudioCapture(audioBufSize_ulaw, ulawFormat);
+			capture = new AudioCapture(audioBufSize_linear);
 			//recorder = new AudioRecorder(ulawFormat);
 
 			int counter = 0;
