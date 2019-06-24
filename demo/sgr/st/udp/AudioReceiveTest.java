@@ -1,13 +1,11 @@
 package sgr.st.udp;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
@@ -45,21 +43,22 @@ public class AudioReceiveTest {
 			linearFormat = MediaSettings.getLinearFormat();
 			receiver = new UDPReceiver(myPort, myIP);
 			//player = new AudioPlayer(audioBufSize_ulaw, audioBufSize_linear, ulawFormat, linearFormat);
-			//player = new AudioPlayer(audioBufSize_linear);
-			/**/
+			player = new AudioPlayer(audioBufSize_linear);
+			/**//*
 			Info dataInfo = new DataLine.Info(SourceDataLine.class,linearFormat);
 			sourceDataLine = (SourceDataLine)AudioSystem.getLine(dataInfo);
 			sourceDataLine.open(linearFormat);
 			sourceDataLine.start();
-
+			*/
 			//recorder = new AudioRecorder(ulawFormat);
 
 			int counter = 0;
 			while(counter < 600) {
 				data = receiver.receive();
 				//recorder.write(data);
-			 	//player.write(new ByteArrayInputStream(data));
-				sourceDataLine.write(data,0,data.length);
+
+			 	player.write(new ByteArrayInputStream(data));
+				//sourceDataLine.write(data,0, audioBufSize_linear);
 				counter++;
 			}
 
@@ -73,8 +72,8 @@ public class AudioReceiveTest {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}finally {
-			//player.close();
-			sourceDataLine.close();
+			player.close();
+			//sourceDataLine.close();
 			receiver.close();
 		}
 
