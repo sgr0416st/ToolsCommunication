@@ -46,6 +46,8 @@ public class AudioTransmitTest {
 			//recorder = new AudioRecorder(ulawFormat);
 
 			int counter = 0;
+			
+			
 			while(counter < 600) {
 				data = capture.read();
 				//recorder.write(data);
