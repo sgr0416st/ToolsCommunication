@@ -15,19 +15,21 @@ import sgr.st.properties.PropertiesReader;
 public class AudioReceiveTest {
 
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		int myPort, audioBufSize_ulaw, audioBufSize_linear;
 		String myIP;
 		PropertiesReader reader;
 
 		UDPReceiver receiver = null;
 		AudioPlayer player = null;
+		@SuppressWarnings("unused")
 		AudioFormat ulawFormat, linearFormat;
 		byte[] data;
 
 		try {
 			// プロパティの読み込み
 			reader = new PropertiesReader(
-					"/Users/satousuguru/workspace/programing/java/propaties/network.properties"
+					"/Users/satousuguru/workspase/EclipseProjects/properties/network.properties"
 					);
 			myIP = reader.getProPerty("IP_MACAIR");
 			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
@@ -35,9 +37,11 @@ public class AudioReceiveTest {
 			audioBufSize_linear = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_LINEAR"));
 
 			ulawFormat = MediaSettings.getUlawFormat();
-			linearFormat = MediaSettings.getUlawFormat();
+			linearFormat = MediaSettings.getLinearFormat();
 			receiver = new UDPReceiver(myPort, myIP);
-			player = new AudioPlayer(audioBufSize_ulaw, audioBufSize_linear, ulawFormat, linearFormat);
+			//player = new AudioPlayer(audioBufSize_ulaw, audioBufSize_linear, ulawFormat, linearFormat);
+			player = new AudioPlayer(audioBufSize_linear);
+
 			//recorder = new AudioRecorder(ulawFormat);
 
 			int counter = 0;
@@ -57,10 +61,11 @@ public class AudioReceiveTest {
 		} catch (LineUnavailableException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
+		}finally {
+			player.close();
+			receiver.close();
 		}
 
-		player.close();
-		receiver.close();
 
 	}
 
