@@ -39,8 +39,10 @@ public class CommunicateAudioDataDemo {
 			reader = new PropertiesReader(
 					"/Users/satousuguru/workspase/EclipseProjects/properties/network.properties"
 					);
+
 			destIP = reader.getProPerty("IP_MACPRO");
 			myIP = reader.getProPerty("IP_MACAIR");
+
 			destPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
 			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
 			audioBufSize_ulaw = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_ULAW"));
