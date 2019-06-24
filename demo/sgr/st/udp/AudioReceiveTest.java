@@ -48,7 +48,6 @@ public class AudioReceiveTest {
 			//player = new AudioPlayer(audioBufSize_linear);
 			/**/
 			Info dataInfo = new DataLine.Info(SourceDataLine.class,linearFormat);
-			byte[] buffer = new byte[audioBufSize_linear];
 			sourceDataLine = (SourceDataLine)AudioSystem.getLine(dataInfo);
 			sourceDataLine.open(linearFormat);
 			sourceDataLine.start();
@@ -60,7 +59,7 @@ public class AudioReceiveTest {
 				data = receiver.receive();
 				//recorder.write(data);
 			 	//player.write(new ByteArrayInputStream(data));
-				sourceDataLine.write(buffer,0,buffer.length);
+				sourceDataLine.write(data,0,data.length);
 				counter++;
 			}
 
