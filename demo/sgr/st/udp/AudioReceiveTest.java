@@ -54,14 +54,23 @@ public class AudioReceiveTest {
 
 			//recorder = new AudioRecorder(ulawFormat);
 
+			long recieved ,writed , write_time = 0, recieve_time = 0;
 			int counter = 0;
+			writed = System.currentTimeMillis();
 			while(counter < 600) {
 				data = receiver.receive();
+				recieved = System.currentTimeMillis();
+				recieve_time +=  recieved - writed;
 				//recorder.write(data);
 			 	//player.write(new ByteArrayInputStream(data));
 				sourceDataLine.write(data,0,data.length);
+				writed = System.currentTimeMillis();
+				write_time += writed - recieved;
 				counter++;
 			}
+
+			System.out.println("write_time: " + write_time);
+			System.out.println("recieve_time: " + recieve_time);
 
 		} catch (SocketException | UnknownHostException e) {
 			// TODO 自動生成された catch ブロック

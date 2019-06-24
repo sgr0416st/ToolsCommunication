@@ -41,7 +41,7 @@ public class AudioTransmitTest {
 
 			transmitter = new UDPTransmitter(destPort, destIP, myPort);
 
-			capture = new AudioCapture(audioBufSize_ulaw, ulawFormat);
+			//capture = new AudioCapture(audioBufSize_ulaw, ulawFormat);
 			capture = new AudioCapture(audioBufSize_linear);
 			//recorder = new AudioRecorder(ulawFormat);
 
