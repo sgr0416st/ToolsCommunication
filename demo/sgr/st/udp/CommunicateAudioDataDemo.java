@@ -40,7 +40,8 @@ public class CommunicateAudioDataDemo {
 					"/Users/satousuguru/workspace/programing/java/propaties/network.properties"
 					);
 			myIP = reader.getProPerty("IP_MACPRO");
-			destIP = reader.getProPerty("IP_MACAIR");
+			//destIP = reader.getProPerty("IP_MACAIR");
+			destIP = reader.getProPerty("IP_MACPRO");
 			destPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
 			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
 			audioBufSize_ulaw = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_ULAW"));
