@@ -37,10 +37,10 @@ public class CommunicateAudioDataDemo {
 		try {
 			// プロパティの読み込み
 			reader = new PropertiesReader(
-					"/Users/satousuguru/workspace/programing/java/propaties/network.properties"
+					"/Users/satousuguru/workspase/EclipseProjects/properties/network.properties"
 					);
-			myIP = reader.getProPerty("IP_MACPRO");
-			destIP = reader.getProPerty("IP_MACAIR");
+			destIP = reader.getProPerty("IP_MACPRO");
+			myIP = reader.getProPerty("IP_MACAIR");
 			destPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
 			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
 			audioBufSize_ulaw = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_ULAW"));
