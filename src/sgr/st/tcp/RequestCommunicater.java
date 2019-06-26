@@ -8,6 +8,10 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import sgr.st.request.ReceiveRequest;
+import sgr.st.request.Request;
+import sgr.st.request.SendRequest;
+
 public class RequestCommunicater {
 
 	private ServerSocket ss;

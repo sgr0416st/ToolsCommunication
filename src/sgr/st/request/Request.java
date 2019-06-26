@@ -1,4 +1,4 @@
-package sgr.st.tcp;
+package sgr.st.request;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -63,57 +63,57 @@ public class Request {
 	 * 現在保持しているリクエストのコマンド名を返します。
 	 * コマンド名は{@code Command}クラスある定義名に準拠しています。
 	 * @return commandName リクエストのコマンド名
-	 * @see sgr.st.data.TCPConstants
+	 * @see sgr.st.request.RequestConstants.TCPConstants
 	 */
 	public String getCommandName(){
 		String name = null;
 		switch (command) {
-		case TCPConstants.COM_TEST:
+		case RequestConstants.COM_TEST:
 			name = "COM_TEST";
 			break;
-		case TCPConstants.COM_EXIT:
+		case RequestConstants.COM_EXIT:
 			name = "COM_EXIT";
 			break;
-		case TCPConstants.COM_NOD:
+		case RequestConstants.COM_NOD:
 			name = "COM_NOD";
 			break;
-		case TCPConstants.COM_REJECT:
+		case RequestConstants.COM_REJECT:
 			name = "COM_REJECT";
 			break;
-		case TCPConstants.COM_TILTS:
+		case RequestConstants.COM_TILTS:
 			name = "COM_TILTS";
 			break;
-		case TCPConstants.COM_CONFUSE:
+		case RequestConstants.COM_CONFUSE:
 			name = "COM_CONFUSE";
 			break;
-		case TCPConstants.COM_HAPPY:
+		case RequestConstants.COM_HAPPY:
 			name = "COM_HAPPY";
 			break;
-		case TCPConstants.COM_SAD:
+		case RequestConstants.COM_SAD:
 			name = "COM_SAD";
 			break;
-		case TCPConstants.COM_ANGRY:
+		case RequestConstants.COM_ANGRY:
 			name = "COM_ANGRY";
 			break;
-		case TCPConstants.COM_ANGLES:
+		case RequestConstants.COM_ANGLES:
 			name = "COM_ANGLES";
 			break;
-		case TCPConstants.COM_POSTURES:
+		case RequestConstants.COM_POSTURES:
 			name = "COM_POSTURES";
 			break;
-		case TCPConstants.COM_MOTIONS:
+		case RequestConstants.COM_MOTIONS:
 			name = "COM_MOTIONS";
 			break;
-		case TCPConstants.COM_IMITATE:
+		case RequestConstants.COM_IMITATE:
 			name = "COM_IMITATE";
 			break;
-		case TCPConstants.COM_STAND:
+		case RequestConstants.COM_STAND:
 			name = "COM_STAND";
 			break;
-		case TCPConstants.COM_PROPER_MOTIONS:
+		case RequestConstants.COM_PROPER_MOTIONS:
 			name = "COM_PROPER_MOTIONS";
 			break;
-		case TCPConstants.COM_UNPROPER_MOTIONS:
+		case RequestConstants.COM_UNPROPER_MOTIONS:
 			name = "COM_UNPROPER_MOTIONS";
 			break;
 		default:
@@ -200,7 +200,7 @@ public class Request {
 	 */
 	public void setExitRequest(){
 		clear();
-		command = TCPConstants.COM_EXIT;
+		command = RequestConstants.COM_EXIT;
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class Request {
 	 */
 	public void setOKRequest(){
 		clear();
-		command = TCPConstants.COM_OK;
+		command = RequestConstants.COM_OK;
 	}
 
 	/**
@@ -222,28 +222,28 @@ public class Request {
 		byte flag = param[0];
 		byte[] data,stringSizeData;
 		switch (flag) {
-		case TCPConstants.FLAG_BYTE:
+		case RequestConstants.FLAG_BYTE:
 			ans = (int)param[1];
 			break;
-		case TCPConstants.FLAG_SHORT:
+		case RequestConstants.FLAG_SHORT:
 			data = new byte[2];
 			for(i = 0; i < data.length; i++)
 				data[i] = param[i + 1];
 			ans = ParseByteData.toShort(data);
 			break;
-		case TCPConstants.FLAG_INT:
+		case RequestConstants.FLAG_INT:
 			data = new byte[4];
 			for(i = 0; i < data.length; i++)
 				data[i] = param[i + 1];
 			ans = ParseByteData.toInt(data);
 			break;
-		case TCPConstants.FLAG_DOUBLE:
+		case RequestConstants.FLAG_DOUBLE:
 			data = new byte[8];
 			for(i = 0; i < data.length; i++)
 				data[i] = param[i + 1];
 			ans = ParseByteData.toDouble(data);
 			break;
-		case TCPConstants.FLAG_STRING:
+		case RequestConstants.FLAG_STRING:
 			stringSizeData = new byte[2];
 			for(s = 0; s < 2; s++){
 				stringSizeData[s] = param[s+1];
@@ -289,7 +289,7 @@ public class Request {
 		byte[] param = new byte[data_String.length + 3];
 		byte[] stringSizeData = ParseByteData.toByte((short)(data_String.length + 3));
 
-		param[0] = TCPConstants.FLAG_STRING;
+		param[0] = RequestConstants.FLAG_STRING;
 		param[1] = stringSizeData[0];
 		param[2] = stringSizeData[1];
 		for(int i = 0; i < data_String.length; i++){
@@ -314,7 +314,7 @@ public class Request {
 	protected static byte[] toByteParam(double data) {
 		byte[] param = new byte[9];
 		byte[] data_double = ParseByteData.toByte(data);
-		param[0] = TCPConstants.FLAG_DOUBLE;
+		param[0] = RequestConstants.FLAG_DOUBLE;
 		for(int i = 0; i < data_double.length; i++){
 			param[i+1] = data_double[i];
 		}
@@ -337,7 +337,7 @@ public class Request {
 	protected static byte[] toByteParam(int data) {
 		byte[] param = new byte[5];
 		byte[] data_int = ParseByteData.toByte(data);
-		param[0] = TCPConstants.FLAG_INT;
+		param[0] = RequestConstants.FLAG_INT;
 		for(int i = 0; i < data_int.length; i++){
 			param[i+1] = data_int[i];
 		}
@@ -360,7 +360,7 @@ public class Request {
 	protected static byte[] toByteParam(short data){
 		byte[] param = new byte[3];
 		byte[] data_short = ParseByteData.toByte(data);
-		param[0] = TCPConstants.FLAG_SHORT;
+		param[0] = RequestConstants.FLAG_SHORT;
 		for(int i = 0; i < 2; i++){
 			param[i+1] = data_short[i];
 		}
@@ -382,7 +382,7 @@ public class Request {
 	 */
 	protected static byte[] toByteParam(byte data){
 		byte[] param = new byte[2];
-		param[0] = TCPConstants.FLAG_SHORT;
+		param[0] = RequestConstants.FLAG_SHORT;
 			param[1] = data;
 		return param;
 	}

@@ -1,6 +1,6 @@
-package sgr.st.tcp;
+package sgr.st.request;
 
-public class TCPConstants {
+public class RequestConstants {
 
 	//通信用の命令
 	public static final byte FLAG_NULL = 0;

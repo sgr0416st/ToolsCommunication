@@ -1,4 +1,4 @@
-package sgr.st.tcp;
+package sgr.st.request;
 
 import java.util.Arrays;
 
@@ -107,7 +107,7 @@ public class ReceiveRequest extends Request {
 
 			//パラメータをリストに保管
 			switch (data_flag) {
-			case TCPConstants.FLAG_BYTE:
+			case RequestConstants.FLAG_BYTE:
 				readCounter = 1;
 				byte[] data_byte = new byte[2];
 				data_byte[0] = data_flag;
@@ -119,7 +119,7 @@ public class ReceiveRequest extends Request {
 				params.add(data_byte);
 
 				break;
-			case TCPConstants.FLAG_SHORT:
+			case RequestConstants.FLAG_SHORT:
 				readCounter = 2;
 				byte[] data_short = new byte[3];
 				data_short[0] = data_flag;
@@ -132,7 +132,7 @@ public class ReceiveRequest extends Request {
 
 
 				break;
-			case TCPConstants.FLAG_INT:
+			case RequestConstants.FLAG_INT:
 				readCounter = 4;
 				byte[] data_int = new byte[5];
 				data_int[0] = data_flag;
@@ -144,7 +144,7 @@ public class ReceiveRequest extends Request {
 				params.add(data_int);
 
 				break;
-			case TCPConstants.FLAG_DOUBLE:
+			case RequestConstants.FLAG_DOUBLE:
 				readCounter = 8;
 				byte[] data_double = new byte[9];
 				data_double[0] = data_flag;
@@ -157,7 +157,7 @@ public class ReceiveRequest extends Request {
 
 
 				break;
-			case TCPConstants.FLAG_STRING:
+			case RequestConstants.FLAG_STRING:
 				stringSizeData = new byte[2];
 				for(s = 0; s < 2; s++){
 					stringSizeData[s] = paramsData[readByte];

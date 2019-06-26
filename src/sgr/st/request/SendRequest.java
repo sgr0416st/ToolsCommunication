@@ -1,4 +1,4 @@
-package sgr.st.tcp;
+package sgr.st.request;
 
 import sgr.st.dataTranslater.ParseByteData;
 
@@ -164,31 +164,31 @@ public class SendRequest extends Request {
 		for(int j = 0;j < addDataNumber;j++){
 			param = params.get(j);
 			switch (param[0]) {
-			case TCPConstants.FLAG_BYTE:
+			case RequestConstants.FLAG_BYTE:
 				for(int k = 0; k < 2; k++){
 					requestData[readByte] = param[k];
 					readByte++;
 				}
 				break;
-			case TCPConstants.FLAG_SHORT:
+			case RequestConstants.FLAG_SHORT:
 				for(int k = 0; k < 3; k++){
 					requestData[readByte] = param[k];
 					readByte++;
 				}
 				break;
-			case TCPConstants.FLAG_INT:
+			case RequestConstants.FLAG_INT:
 				for(int k = 0; k < 5; k++){
 					requestData[readByte] = param[k];
 					readByte++;
 				}
 				break;
-			case TCPConstants.FLAG_DOUBLE:
+			case RequestConstants.FLAG_DOUBLE:
 				for(int k = 0; k < 9; k++){
 					requestData[readByte] = param[k];
 					readByte++;
 				}
 				break;
-			case TCPConstants.FLAG_STRING:
+			case RequestConstants.FLAG_STRING:
 				byte[] stringSizeData = new byte[2];
 				for(int s = 0; s < 2; s++){
 					stringSizeData[s] = param[s+1];
