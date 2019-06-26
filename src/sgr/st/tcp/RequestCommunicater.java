@@ -17,7 +17,6 @@ public class RequestCommunicater {
 	private InputStream is;
 	private DataInputStream dis;
 
-
 	/**
 	 * 初期化処理です。
 	 */
@@ -86,9 +85,9 @@ public class RequestCommunicater {
 	 * @return request ストリームから取得したリクエストのバイナリデータを解析して、Requestクラスの形式に復元したデータ。
 	 * @throws IOException ストリームからリクエストヘッダの読み取りに失敗した時。パラメータの抽出に失敗した時。
 	 */
-	public RecieveRequest receive() throws IOException{
+	public ReceiveRequest receive() throws IOException{
 		//最初に初期化
-		RecieveRequest recieveRequest = new RecieveRequest();
+		ReceiveRequest recieveRequest = new ReceiveRequest();
 		byte[] requestHeader,paramsData;
 		requestHeader = new byte[4];
 		paramsData = null;

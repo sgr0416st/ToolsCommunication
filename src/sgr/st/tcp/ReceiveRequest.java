@@ -1,5 +1,7 @@
 package sgr.st.tcp;
 
+import java.util.Arrays;
+
 import sgr.st.dataTranslater.ParseByteData;
 
 /**
@@ -27,10 +29,25 @@ import sgr.st.dataTranslater.ParseByteData;
  *
  * @author suguru
  */
-public class RecieveRequest extends Request {
+public class ReceiveRequest extends Request {
 
-	public RecieveRequest() {
+	public ReceiveRequest() {
 		super();
+	}
+
+	/**
+	 * バイナリデータからリクエストを生成します。
+	 * データがリクエストプロトコルに則っていない場合や、欠損していた場合は空のリクエストが返されます。
+	 *
+	 * @param data リクエストプロトコルの形式に沿ったバイナリデータ
+	 * @return 正しい形式のデータならばそのReceiveRequestオブジェクト、それ以外は空のReceiveRequestオブジェクト
+	 */
+	public static ReceiveRequest create(byte[] data) {
+		ReceiveRequest request = new ReceiveRequest();
+		if(request.extractMetaDataFrom(Arrays.copyOfRange(data, 0, 4))) {
+			request.extractParamsFrom(Arrays.copyOfRange(data, 4, data.length));
+		}
+		return request;
 	}
 
 	/**
