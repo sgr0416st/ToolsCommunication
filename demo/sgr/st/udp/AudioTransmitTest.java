@@ -4,29 +4,20 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.TargetDataLine;
 
 import sgr.st.AudioCapture;
-import sgr.st.media.MediaSettings;
 import sgr.st.properties.PropertiesReader;
 
 public class AudioTransmitTest {
 
 	public static void main(String[] args) {
-		@SuppressWarnings("unused")
-		int destPort, myPort, audioBufSize_ulaw, audioBufSize_linear;
+		int destPort, myPort, audioBufSize_linear;
 		String destIP;
 		PropertiesReader reader;
 
 		UDPTransmitter transmitter = null;
 		AudioCapture capture = null;
-		@SuppressWarnings("unused")
-		AudioFormat ulawFormat, linearFormat;
 		byte[] data;
 
 		try {
@@ -37,25 +28,11 @@ public class AudioTransmitTest {
 			destIP = reader.getProPerty("IP_MACAIR");
 			destPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_RECEIVE"));
 			myPort = Integer.parseInt(reader.getProPerty("PORT_AUDIO_SEND"));
-			audioBufSize_ulaw = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_ULAW"));
 			audioBufSize_linear = Integer.parseInt(reader.getProPerty("SIZE_MAX_DATA_LINEAR"));
-
-			linearFormat = MediaSettings.getLinearFormat();
-			ulawFormat = MediaSettings.getUlawFormat();
 
 			transmitter = new UDPTransmitter(destPort, destIP, myPort);
 
-			//capture = new AudioCapture(audioBufSize_ulaw, ulawFormat);
-			//capture = new AudioCapture(audioBufSize_linear);
-
-			Info info = new DataLine.Info(TargetDataLine.class, linearFormat);
-			TargetDataLine targetDataLine = (TargetDataLine)AudioSystem.getLine(info);
-			targetDataLine.open(linearFormat);
-
-			data = new byte[audioBufSize_linear];
-			//AudioInputStream inStream = new AudioInputStream(targetDataLine);
-			targetDataLine.start();
-
+			capture = new AudioCapture(audioBufSize_linear);
 			//recorder = new AudioRecorder(ulawFormat);
 
 			int counter = 0;
@@ -63,17 +40,11 @@ public class AudioTransmitTest {
 			long captured ,transmitted , capture_time = 0, transmit_time = 0;
 			while(counter < 600) {
 				transmitted = System.currentTimeMillis();
-				//data = capture.read();
-				/**/
-				targetDataLine.read(data, 0, audioBufSize_linear);
-
+				data = capture.read();
 				captured = System.currentTimeMillis();
 				capture_time +=  captured - transmitted;
 				System.out.println("captured: " + capture_time);
-
-
 				//recorder.write(data);
-
 				transmitter.transmit(data);
 				transmitted = System.currentTimeMillis();
 				transmit_time += transmitted - captured;
@@ -94,10 +65,7 @@ public class AudioTransmitTest {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-
-		//capture.close();
+		capture.close();
 		transmitter.close();
-
 	}
-
 }
