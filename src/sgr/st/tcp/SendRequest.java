@@ -31,7 +31,6 @@ public class SendRequest extends Request {
 	private static final int HEDDERSIZE = 4;
 	private byte[] requestHeader,requestData;
 
-
 	/**
 	 * リクエストを初期化します。
 	 */
@@ -41,47 +40,23 @@ public class SendRequest extends Request {
 		requestData = null;
 	}
 
-	public SendRequest(Request request, byte flag) {
-		this();
-		addDataNumber = request.addDataNumber;
-		command = request.command;
-		requestSize = request.getRequestSize();
-		paramObjects = request.paramObjects;
-		switch (flag) {
-		case TCPConstants.FLAG_BYTE:
-			for(int i = 0;  i < addDataNumber; i++) {
-				params.add(toByteParam((byte)paramObjects.get(i)));
-			}
-			break;
-		case TCPConstants.FLAG_SHORT:
-			for(int i = 0;  i < addDataNumber; i++) {
-				params.add(toByteParam((short)paramObjects.get(i)));
-			}
-			break;
-		case TCPConstants.FLAG_INT:
-			for(int i = 0;  i < addDataNumber; i++) {
-				params.add(toByteParam((int)paramObjects.get(i)));
-			}
-			break;
-		case TCPConstants.FLAG_DOUBLE:
-			for(int i = 0;  i < addDataNumber; i++) {
-				params.add(toByteParam((double)paramObjects.get(i)));
-			}
-			break;
-		default:
-			break;
-		}
-	}
+	/**
+	 * Requestオブジェクトから、sendRequestを生成します。
+	 * 新しいSendRequestオブジェクトは、元のRequestオブジェクトのデータを引き継ぎます。
+	 *
+	 * @param request 元となるリクエスト。
+	 * @return
+	 */
+	public static SendRequest create(Request request) {
+		SendRequest sendRequest = new SendRequest();
+		sendRequest.addDataNumber = request.addDataNumber;
+		sendRequest.command = request.command;
+		sendRequest.requestSize = request.getRequestSize();
+		sendRequest.paramObjects = request.paramObjects;
+		sendRequest.params = request.params;
 
-	public SendRequest(Request request) {
-		this();
-		addDataNumber = request.addDataNumber;
-		command = request.command;
-		requestSize = request.getRequestSize();
-		paramObjects = request.paramObjects;
-		params = request.params;
+		return sendRequest;
 	}
-
 
 	/**
 	 * リクエストのパラメータ情報に、dataを追加します。
@@ -148,14 +123,12 @@ public class SendRequest extends Request {
 		this.command = command;
 	}
 
-
 	/**
 	 * 保持しているリクエストデータから、リクエストヘッダを作成します。
 	 * このメソッドを使用後はリクエストの変更はできません。
 	 */
-	private void setRequestHeader(byte command){
-		//requestSize += 4;
-		setRequestHeader(ParseByteData.toByte((short)requestSize), command, (byte)addDataNumber);
+	private void setRequestHeader(){
+		setRequestHeader(ParseByteData.toByte((short)requestSize), this.command, (byte)addDataNumber);
 	}
 	private void setRequestHeader(byte[] requestSizeData, byte command, byte addDataNumber){
 		if(requestSizeData.length != 2){
@@ -173,14 +146,12 @@ public class SendRequest extends Request {
 	}
 
 	/**
-	 * 引数で指定されたコマンド、あらかじめ設定された追加パラメータ情報から実際にリクエストを構築します。
-	 * @param command リクエストに付加するコマンド。Commmandクラスで定義されているものから選択する。
-	 * @see TCPConstants
+	 * あらかじめ設定されたリクエストから実際にバイナリデータを構築します。
+	 *
 	 * @return requestData リクエストのバイナリデータ。
 	 */
-	public byte[] build(byte command){
-
-		setRequestHeader(command);
+	public byte[] build(){
+		setRequestHeader();
 
 		//requestHedder, paramsリスト から request を作成
 		byte[] param;
@@ -232,20 +203,9 @@ public class SendRequest extends Request {
 				break;
 			}
 		}
-
-
-
 		return requestData;
 	}
-	/**
-	 * あらかじめ設定されたコマンド、追加パラメータ情報から実際にリクエストを構築します。
-	 * コマンドはデフォルトでは COM_EXIT が設定されています。
-	 * @see TCPConstants
-	 * @return requestData リクエストのバイナリデータ。
-	 */
-	public byte[] build() {
-		return build(this.command);
-	}
+
 
 	public void clear() {
 		if(params != null)

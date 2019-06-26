@@ -55,7 +55,7 @@ public class AudioReceiveTest {
 			long recieved ,writed , write_time = 0, recieve_time = 0;
 			int counter = 0;
 			writed = System.currentTimeMillis();
-			while(counter < 600) {
+			while(counter < 4000) {
 				data = receiver.receive();
 				recieved = System.currentTimeMillis();
 				recieve_time +=  recieved - writed;

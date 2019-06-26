@@ -30,7 +30,6 @@ import sgr.st.dataTranslater.ParseByteData;
 public class RecieveRequest extends Request {
 
 	public RecieveRequest() {
-		// TODO 自動生成されたコンストラクター・スタブ
 		super();
 	}
 

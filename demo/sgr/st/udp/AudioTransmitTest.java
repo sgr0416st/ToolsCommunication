@@ -5,7 +5,11 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.TargetDataLine;
 
 import sgr.st.AudioCapture;
 import sgr.st.media.MediaSettings;
@@ -42,18 +46,43 @@ public class AudioTransmitTest {
 			transmitter = new UDPTransmitter(destPort, destIP, myPort);
 
 			//capture = new AudioCapture(audioBufSize_ulaw, ulawFormat);
-			capture = new AudioCapture(audioBufSize_linear);
+			//capture = new AudioCapture(audioBufSize_linear);
+
+			Info info = new DataLine.Info(TargetDataLine.class, linearFormat);
+			TargetDataLine targetDataLine = (TargetDataLine)AudioSystem.getLine(info);
+			targetDataLine.open(linearFormat);
+
+			data = new byte[audioBufSize_linear];
+			//AudioInputStream inStream = new AudioInputStream(targetDataLine);
+			targetDataLine.start();
+
 			//recorder = new AudioRecorder(ulawFormat);
 
 			int counter = 0;
-			
-			
+
+			long captured ,transmitted , capture_time = 0, transmit_time = 0;
 			while(counter < 600) {
-				data = capture.read();
+				transmitted = System.currentTimeMillis();
+				//data = capture.read();
+				/**/
+				targetDataLine.read(data, 0, audioBufSize_linear);
+
+				captured = System.currentTimeMillis();
+				capture_time +=  captured - transmitted;
+				System.out.println("captured: " + capture_time);
+
+
 				//recorder.write(data);
+
 				transmitter.transmit(data);
+				transmitted = System.currentTimeMillis();
+				transmit_time += transmitted - captured;
 				counter++;
 			}
+
+			System.out.println("captured: " + capture_time);
+			System.out.println("transmit_time: " + transmit_time);
+
 
 		} catch (SocketException | UnknownHostException e) {
 			// TODO 自動生成された catch ブロック
@@ -66,7 +95,7 @@ public class AudioTransmitTest {
 			e.printStackTrace();
 		}
 
-		capture.close();
+		//capture.close();
 		transmitter.close();
 
 	}

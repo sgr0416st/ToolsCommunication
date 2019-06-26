@@ -133,24 +133,10 @@ public class RequestCommunicater {
 	/**
 	 *  connect に成功して、接続要求を受理した相手から実際にリクエストを受信します。
 	 * @param request 最低でもリクエストサイズとコマンドが決められた形式で定義されたリクエスト
-	 * @param flag 追加パラメータのデータ型．データ型の違う二種類以上の追加パラメータは扱えません．
-	 * 追加パラメータがない場合は０を代入してください．
-	 * @throws IOException
-	 */
-	public void send(Request request, byte flag) throws IOException{
-		byte[] requestData = new SendRequest(request, flag).build();
-		//requestの送信
-		dos.write(requestData);
-		dos.flush();
-	}
-
-	/**
-	 *  connect に成功して、接続要求を受理した相手から実際にリクエストを受信します。
-	 * @param request 最低でもリクエストサイズとコマンドが決められた形式で定義されたリクエスト
 	 * @throws IOException
 	 */
 	public void send(Request request) throws IOException{
-		byte[] requestData = new SendRequest(request).build();
+		byte[] requestData = SendRequest.create(request).build();
 		//requestの送信
 		dos.write(requestData);
 		dos.flush();

@@ -59,7 +59,7 @@ public abstract class DataReceiveThread extends RepeatedTaskThread{
 	 *
 	 * @throws SocketException 受信機の作成に失敗した時
 	 */
-	protected void setReciever() throws SocketException {
+	protected void setReceiver() throws SocketException {
 		receiver = new UDPReceiver(myPort, myIP);
 	}
 
@@ -76,7 +76,7 @@ public abstract class DataReceiveThread extends RepeatedTaskThread{
 	@Override
 	protected void doBeforeTask() {
 		try {
-			this.setReciever();
+			this.setReceiver();
 		} catch (SocketException e) {
 			e.printStackTrace();
 			this.stopThread();
