@@ -76,7 +76,9 @@ public abstract class DataTransmitThread extends RepeatedTaskThread{
 	protected void doRepeatedTask() throws AbortTaskException {
 		try {
 			data = doRepeatedDataGeneratingTask();
-			transmitter.transmit(data);
+			if(data != null) {
+				transmitter.transmit(data);
+			}
 		} catch (IOException e) {
 			if(!this.isStopped()) {
 				e.printStackTrace();

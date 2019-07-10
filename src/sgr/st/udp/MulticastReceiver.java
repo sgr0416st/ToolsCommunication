@@ -15,7 +15,8 @@ public class MulticastReceiver extends UDPReceiver {
 	protected boolean setSocket(int myPort, String myIP) {
 		try {
 			MulticastSocket s_temp =  new MulticastSocket(myPort);
-			s_temp.joinGroup(InetAddress.getByName(myIP));
+			InetAddress group = InetAddress.getByName(myIP);
+			s_temp.joinGroup(group);
 			this.socket = s_temp;
 		} catch (IOException e) {
 			e.printStackTrace();
