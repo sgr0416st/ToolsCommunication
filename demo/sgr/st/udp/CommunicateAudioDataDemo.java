@@ -12,9 +12,9 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
 import sgr.st.AudioCapture;
+import sgr.st.AudioConstants;
 import sgr.st.AudioPlayer;
 import sgr.st.AudioRecorder;
-import sgr.st.media.MediaSettings;
 import sgr.st.properties.PropertiesReader;
 
 /**
@@ -100,7 +100,7 @@ class AudioDataTransmitThread extends DataTransmitThread{
 		super(destPort, destIP, myPort);
 		this.audioBufSize = audioBufSize;
 		this.filePath = filePath;
-		this.ulawFormat = MediaSettings.getUlawFormat();
+		this.ulawFormat = AudioConstants.ULAW_FORMAT;
 	}
 
 	@Override
@@ -150,8 +150,8 @@ class AudioDataReceiveThread extends DataReceiveThread{
 		this.audioBufSize_bf = audioBufSize_bf;
 		this.audioBufSize_af = audioBufSize_af;
 		this.filePath = filePath;
-		this.ulawFormat = MediaSettings.getUlawFormat();
-		this.linearFormat = MediaSettings.getLinearFormat();
+		this.ulawFormat = AudioConstants.ULAW_FORMAT;
+		this.linearFormat = AudioConstants.LINEAR_FORMAT;
 	}
 
 	@Override

@@ -40,14 +40,18 @@ public class ReceiveRequest extends Request {
 	 * データがリクエストプロトコルに則っていない場合や、欠損していた場合は空のリクエストが返されます。
 	 *
 	 * @param data リクエストプロトコルの形式に沿ったバイナリデータ
+	 * @param size バイナリデータの実データ部分のサイズ
 	 * @return 正しい形式のデータならばそのReceiveRequestオブジェクト、それ以外は空のReceiveRequestオブジェクト
 	 */
-	public static ReceiveRequest create(byte[] data) {
+	public static ReceiveRequest create(byte[] data, int size) {
 		ReceiveRequest request = new ReceiveRequest();
 		if(request.extractMetaDataFrom(Arrays.copyOfRange(data, 0, 4))) {
-			request.extractParamsFrom(Arrays.copyOfRange(data, 4, data.length));
+			request.extractParamsFrom(Arrays.copyOfRange(data, 4, size));
 		}
 		return request;
+	}
+	public static ReceiveRequest create(byte[] data) {
+		return ReceiveRequest.create(data, data.length);
 	}
 
 	/**

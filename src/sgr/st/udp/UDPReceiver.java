@@ -63,6 +63,7 @@ public class UDPReceiver{
 				socket = new DatagramSocket(myPort, InetAddress.getByName(myIP));
 			}
 		} catch (SocketException e) {
+			e.printStackTrace();
 			return false;
 		} catch (UnknownHostException e) {
 			// TODO 自動生成された catch ブロック
